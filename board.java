@@ -13,7 +13,7 @@ public class board
     {
         
         int row=10;
-        int col= 15;
+        int col= 30;
 
         int[][] mygrid = new int[row][col];
 
