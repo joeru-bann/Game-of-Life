@@ -77,7 +77,7 @@ public class Game
         switch (choice){
             case 1: //random gen
             int row=10;
-            int col= 15;
+            int col=30;
 
             int[][] mygrid = new int[row][col];
 
@@ -112,7 +112,7 @@ public class Game
             break;
             
             case 5: //if using pre-made file
-            System.out.println("please enter the exact name of your custom file (must be in game directory)");
+            System.out.println("please enter the exact name of your custom file(inc .txt) (must be in game directory)");
             File customFile=new File (keyin.nextLine());
             try{
                 Scanner fileRead = new Scanner(customFile);

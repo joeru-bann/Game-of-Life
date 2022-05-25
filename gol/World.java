@@ -1,5 +1,7 @@
- 
+package gol;
 
+ 
+import gol.Refer;
 /**
  * The base rules for each "cell"
  * Joel Bannister
@@ -7,7 +9,7 @@
  */
 
 
-public class World
+public class World 
 {
 
     boolean neighbour = false;
