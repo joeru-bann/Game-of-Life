@@ -2,6 +2,7 @@
 dependency1.from=Game
 dependency1.to=board
 dependency1.type=UsesDependency
+<<<<<<< HEAD
 dependency2.from=World
 dependency2.to=Cell
 dependency2.type=UsesDependency
@@ -12,9 +13,32 @@ editor.fx.0.height=1009
 editor.fx.0.width=765
 editor.fx.0.x=745
 editor.fx.0.y=0
+=======
+<<<<<<< HEAD
+editor.fx.0.height=1047
+editor.fx.0.width=1288
+editor.fx.0.x=1279
+editor.fx.0.y=0
+objectbench.height=93
+objectbench.width=760
+package.divider.horizontal=0.6
+package.divider.vertical=0.8
+package.editor.height=393
+package.editor.width=670
+package.editor.x=1368
+package.editor.y=186
+package.frame.height=600
+package.frame.width=800
+=======
+editor.fx.0.height=775
+editor.fx.0.width=891
+editor.fx.0.x=512
+editor.fx.0.y=116
+>>>>>>> 818ed2ac7c5bcfa7570d7515297f98f5eba4e83a
 objectbench.height=92
 objectbench.width=727
 package.divider.horizontal=0.6
+<<<<<<< HEAD
 package.divider.vertical=0.8904761904761905
 package.editor.height=802
 package.editor.width=638
@@ -24,11 +48,49 @@ package.frame.height=1009
 package.frame.width=765
 package.numDependencies=3
 package.numTargets=6
+=======
+package.divider.vertical=0.800531914893617
+package.editor.height=393
+package.editor.width=700
+package.editor.x=40
+package.editor.y=40
+package.frame.height=600
+package.frame.width=827
+>>>>>>> e459d349b3bd0c4ab66043cbd2ccddef160c0970
+package.numDependencies=1
+package.numTargets=3
+>>>>>>> 818ed2ac7c5bcfa7570d7515297f98f5eba4e83a
 package.showExtends=true
 package.showUses=true
 project.charset=UTF-8
 readme.height=60
 readme.name=@README
+<<<<<<< HEAD
+readme.width=47
+readme.x=10
+readme.y=10
+target1.height=50
+target1.name=Game
+target1.showInterface=false
+target1.type=ClassTarget
+target1.width=80
+target1.x=90
+target1.y=10
+target2.height=50
+target2.name=Cell
+target2.showInterface=false
+target2.type=ClassTarget
+target2.width=80
+target2.x=180
+target2.y=10
+target3.height=50
+target3.name=board
+target3.showInterface=false
+target3.type=ClassTarget
+target3.width=80
+target3.x=70
+target3.y=70
+=======
 readme.width=48
 readme.x=10
 readme.y=10
@@ -51,6 +113,7 @@ target3.name=World
 target3.showInterface=false
 target3.type=ClassTarget
 target3.width=120
+<<<<<<< HEAD
 target3.x=400
 target3.y=220
 target4.height=70
@@ -74,3 +137,8 @@ target6.type=ClassTarget
 target6.width=120
 target6.x=70
 target6.y=130
+=======
+target3.x=70
+target3.y=130
+>>>>>>> e459d349b3bd0c4ab66043cbd2ccddef160c0970
+>>>>>>> 818ed2ac7c5bcfa7570d7515297f98f5eba4e83a

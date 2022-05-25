@@ -6,12 +6,11 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Main
-{
+public class Main {
 
-    public Main()
-    {
-        
-    }
+	public static void main(String[] args) {
+		Window.create();
 
+		new MainLoop().start();
+	}
 }
