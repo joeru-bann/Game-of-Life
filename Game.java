@@ -1,3 +1,4 @@
+ 
 /**
  * @author (Joel Bannister)
  * @version (10.5.22)
@@ -95,7 +96,7 @@ public class Game
             // Displaying the grid  
 
             System.out.println();
-            System.out.println("First generation");
+            System.out.println("gen 1");
             for (int i=0; i < row; i++)
             {
                 for (int j = 0; j < col; j++)
