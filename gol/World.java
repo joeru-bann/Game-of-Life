@@ -1,53 +1,76 @@
 package gol;
-
- 
+import gol.utils.MathHelper;
+import java.awt.Graphics;
 import gol.Refer;
 /**
- * The base rules for each "cell"
+ * Fundamental rules for grid checking location + neighbours
  * Joel Bannister
  * 16.05.22
  */
 
-
 public class World 
 {
-
-    boolean neighbour = false;
-    boolean alive = true;
-    
-    private int WORLDSIZE;
     private final int DEAD = 0;
     private final int ALIVE = 1;
     private int world[][];
     private int worldCopy[][];
-    
+
     private Cell[][] grid;
 
     public void update() {
         int countAlive;
-        Cell[][] gridCopy = new Cell[Refer.world_width][Refer.world_height]; 
-        
+        Cell[][] worldCopy = new Cell[Refer.world_width][Refer.world_height];
+        for (int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[i].length;j++){
+                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD;
+            }
+        }
+
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[i].length;j++){
                 countAlive = this.getNeighborCells(i, j);
+                //rules for deciding whether or not cell lives or dies
+                if(grid[i][j]== Cell.ALIVE) {
+
+                    if(countAlive > 3)
+                        worldCopy[i][j] = Cell.DEAD;
+                    else if (countAlive < 2)
+                        worldCopy[i][j] = Cell.DEAD;
+                    else
+                        worldCopy[i][j] = Cell.ALIVE;
+                }
+                else {
+                    if(countAlive == 3)
+                        worldCopy[i][j] = Cell.ALIVE;
+                    else
+                        worldCopy[i][j] = Cell.DEAD;
+                }                  
             }
         }
+        this.grid = worldCopy;
     }
 
     public int getNeighborCells(int x, int y) {
-
-        int aliveCount = 0; 
-
+        int countAlive = 0; 
+            //counting cells amount of alive neighbours
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
+                try{
+                    if (world[i][j] == ALIVE && (x != i || y != j))
+                        countAlive += 1;
+                } catch(ArrayIndexOutOfBoundsException e){
+                    continue; //in case it counts anything out of bounds
+                }
 
-                if (world[i][j] == ALIVE && (x != i || y != j))
-                    aliveCount += 1;
-            }
+            } 
         }
-
-        return aliveCount;
+            //managing possible false-alives
+        if(grid[x][y] == Cell.ALIVE)
+            return countAlive - 1;
+        else 
+            return countAlive;
     }
 
 }
+
 

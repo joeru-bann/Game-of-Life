@@ -1,18 +1,14 @@
 package gol;
 
- 
-
 /**
- * Write a description of class Main here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * @Joel
+ * @26/05/22
  */
 public class Main {
 
-	public static void main(String[] args) {
-		Window.create();
-
-		new MainLoop().start();
-	}
+    public static void main(String[] args) {
+        Window.create();
+        
+        new MainLoop().start();
+    }
 }

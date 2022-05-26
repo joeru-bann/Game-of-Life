@@ -24,7 +24,7 @@ public class Game
     //variables begin/set up gamne
     public Game()
     {
-        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! /n"
+        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n"
             + "This is the run down:\n");
 
         //Game's rules explanation
@@ -70,76 +70,74 @@ public class Game
 
             if(gameModePicked){
                 new Board();
-                
+
             }
         }
 
         switch (choice){
             case 1: //random gen
-            int row=10;
-            int col=30;
+                int row=10;
+                int col=30;
 
-            int[][] mygrid = new int[row][col];
+                int[][] mygrid = new int[row][col];
 
-            // place random numbers into the array 'mygrid'
-            for (int i=0; i<row; i++){
-                for (int j=0; j<col; j++){
-                    //mygrid[i][j] = rand() % 2;
-                    Random rand = new Random(); 
-                    int int_random = rand.nextInt(2);
-                    // print the values out, just for debugging 
-                    mygrid[i][j] = int_random ;
+                // place random numbers into the array 'mygrid'
+                for (int i=0; i<row; i++){
+                    for (int j=0; j<col; j++){
+                        //mygrid[i][j] = rand() % 2;
+                        Random rand = new Random(); 
+                        int int_random = rand.nextInt(2);
+                        // print the values out, just for debugging 
+                        mygrid[i][j] = int_random ;
+                    }
                 }
-            }
 
-            
-            // Displaying the grid  
-
-            System.out.println();
-            System.out.println("gen 1");
-            for (int i=0; i < row; i++)
-            {
-                for (int j = 0; j < col; j++)
+                // Displaying the grid  
+                System.out.println();
+                System.out.println("gen 1");
+                for (int i=0; i < row; i++)
                 {
-                    if (mygrid[i][j] == 0)
-                        System.out.print(".");
-                    else
-                        System.out.print("*");
+                    for (int j = 0; j < col; j++)
+                    {
+                        if (mygrid[i][j] == 0)
+                            System.out.print(".");
+                        else
+                            System.out.print("*");
+                    }
+                    System.out.println();
                 }
                 System.out.println();
-            }
-            System.out.println();
-            break;
-            
+                break;
+
             case 5: //if using pre-made file
-            System.out.println("please enter the exact name of your custom file(inc .txt) (must be in game directory)");
-            File customFile=new File (keyin.nextLine());
-            try{
-                Scanner fileRead = new Scanner(customFile);
-                while(fileRead.hasNextLine()){
-                    //reading the 0's and 1's of custom file
-                    String num;
-                    num = fileRead.nextLine();
-                    
-                    if (num == "1"){
-                        System.out.println("*");
-                    }else{
-                        System.out.println(".");
+                System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
+                File customFile=new File (keyin.nextLine());
+                try{
+                    Scanner fileRead = new Scanner(customFile);
+                    while(fileRead.hasNextLine()){
+                        //reading the 0's and 1's of custom file
+                        int num;
+                        num = fileRead.nextInt();
+
+                        if (num == 1){
+                            System.out.println("*");
+                        }else if (num == 1){
+                            System.out.println(".");
+                        }else{
+                            System.out.println("placeholder");
+                        }
+
                     }
-                    
-                    
                 }
-            }
-            catch(IOException e) {
-                //in case anything goes wrong
-                e.printStackTrace();
-            }
-            break;
-            
+                catch(IOException e) {
+                    //in case anything goes wrong
+                    e.printStackTrace();
+                }
+                break;
+
             case 2: //premade board #1
-            
+
         }
-        
 
     }                       
 }                                

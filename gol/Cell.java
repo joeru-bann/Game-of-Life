@@ -2,11 +2,9 @@ package gol;
 
 /**
  * styling of cell
- *
  * @Joel
  * @25/05/22
  */
-
 import java.awt.Color;
 
 public enum Cell {
@@ -14,14 +12,14 @@ public enum Cell {
     DEAD(Color.BLACK),
     ALIVE(Color.RED);
     
-    private Color color;
+    private Color colour;
     
     Cell(Color color) {
-        this.color = color;
+        this.colour = colour;
     }
     
-    public Color getColor() {
-        return color;
+    public Color getColour() {
+        return colour;
     }
 }
 
