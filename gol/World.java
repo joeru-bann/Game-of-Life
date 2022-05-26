@@ -36,7 +36,7 @@ public class World
 
     public int getNeighborCells(int x, int y) {
 
-        int aliveCount = 0;
+        int aliveCount = 0; 
 
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {

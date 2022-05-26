@@ -1,4 +1,4 @@
- 
+package gol;
 
 /**
  * styling of cell
@@ -10,18 +10,18 @@
 import java.awt.Color;
 
 public enum Cell {
-	
-	DEAD(Color.BLACK),
-	ALIVE(Color.RED);
-	
-	private Color color;
-	
-	Cell(Color color) {
-		this.color = color;
-	}
-	
-	public Color getColor() {
-		return color;
-	}
+    
+    DEAD(Color.BLACK),
+    ALIVE(Color.RED);
+    
+    private Color color;
+    
+    Cell(Color color) {
+        this.color = color;
+    }
+    
+    public Color getColor() {
+        return color;
+    }
 }
 

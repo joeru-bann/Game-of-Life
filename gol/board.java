@@ -1,4 +1,4 @@
- 
+package gol;
 
 /**
  * Board functionality
@@ -9,7 +9,7 @@
 
 import java.util.Random;
 
-public class board
+public class Board
 {
     public static void main(String[] args)
     {

@@ -1,5 +1,6 @@
-package.gol.Refer; 
- 
+package gol;
+
+
 /**
  * definitions for world
  *

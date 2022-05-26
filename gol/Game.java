@@ -1,4 +1,4 @@
- 
+package gol; 
 /**
  * @author (Joel Bannister)
  * @version (10.5.22)
@@ -69,7 +69,7 @@ public class Game
             }
 
             if(gameModePicked){
-                new board();
+                new Board();
                 
             }
         }

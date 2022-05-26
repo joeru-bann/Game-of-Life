@@ -1,4 +1,4 @@
-
+package gol;
 /**
  * Looping updates with delayed timer
  *
