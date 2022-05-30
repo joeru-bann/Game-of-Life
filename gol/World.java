@@ -16,6 +16,23 @@ public class World
     private int worldCopy[][];
 
     private Cell[][] grid;
+    public void draw(Graphics graphics){
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[i].length;j++){
+                graphics.setColor(grid[i][j].getColour());
+                graphics.fillRect(i * Refer.cell_size, j * Refer.cell_size, Refer.cell_size, Refer.cell_size);
+            }
+        }
+    }
+
+    public World()  {
+        this.grid = new Cell[Refer.world_width][Refer.world_height];
+        for (int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[i].length;j++){
+                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD;
+            }
+        }
+    }
 
     public void update() {
         int countAlive;
@@ -52,7 +69,7 @@ public class World
 
     public int getNeighborCells(int x, int y) {
         int countAlive = 0; 
-            //counting cells amount of alive neighbours
+        //counting cells amount of alive neighbours
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
                 try{
@@ -64,7 +81,7 @@ public class World
 
             } 
         }
-            //managing possible false-alives
+        //managing possible false-alives
         if(grid[x][y] == Cell.ALIVE)
             return countAlive - 1;
         else 
@@ -72,5 +89,4 @@ public class World
     }
 
 }
-
 

@@ -1,5 +1,7 @@
 package gol;
-
+import java.awt.Graphics;
+import javax.swing.JPanel;
+import gol.World;
 /**
  * Board functionality
  *
@@ -9,47 +11,25 @@ package gol;
 
 import java.util.Random;
 
-public class Board
+public class Board extends JPanel
 {
-    public static void main(String[] args)
-    {
+    private static final long serialVerisonUID = 1L;
+    
+    private World renderWorld;
+    public void update(World renderWorld) {
+        this.renderWorld = renderWorld;
+    }
+    
+    
+    @Override 
+    protected void paintComponent(Graphics g){//adding grpahic painting for game visuals
+        super.paintComponent(g);
         
-        int row=10;
-        int col= 30;
-
-        int[][] mygrid = new int[row][col];
-
-        // place random numbers into the array 'mygrid'
-        for (int i=0; i<row; i++){
-            for (int j=0; j<col; j++){
-                //mygrid[i][j] = rand() % 2;
-                Random rand = new Random(); 
-                int int_random = rand.nextInt(2);
-                // print the values out, just for debugging 
-                System.out.print(int_random);
-                mygrid[i][j] = int_random ;
-            }
-        }
-
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Displaying the grid  
-
-        System.out.println();
-        System.out.println("Original generation");
-        for (int i=0; i < row; i++)
-        {
-            for (int j = 0; j < col; j++)
-            {
-                if (mygrid[i][j] == 0)
-                    System.out.print(".");
-                else
-                    System.out.print("*");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        //nextGeneration(mygrid, row, col);
-
-    }  
+            if(renderWorld != null)
+                this.renderWorld.draw(g);
+                
+                this.repaint();
+    }
+    
 
 } 
