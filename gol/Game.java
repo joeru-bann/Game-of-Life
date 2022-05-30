@@ -76,37 +76,9 @@ public class Game
 
         switch (choice){
             case 1: //random gen
-                int row=10;
-                int col=30;
-
-                int[][] mygrid = new int[row][col];
-
-                // place random numbers into the array 'mygrid'
-                for (int i=0; i<row; i++){
-                    for (int j=0; j<col; j++){
-                        //mygrid[i][j] = rand() % 2;
-                        Random rand = new Random(); 
-                        int int_random = rand.nextInt(2);
-                        // print the values out, just for debugging 
-                        mygrid[i][j] = int_random ;
-                    }
+                while(choice == 1) {
+                	new Main();
                 }
-
-                // Displaying the grid  
-                System.out.println();
-                System.out.println("gen 1");
-                for (int i=0; i < row; i++)
-                {
-                    for (int j = 0; j < col; j++)
-                    {
-                        if (mygrid[i][j] == 0)
-                            System.out.print(".");
-                        else
-                            System.out.print("*");
-                    }
-                    System.out.println();
-                }
-                System.out.println();
                 break;
 
             case 5: //if using pre-made file

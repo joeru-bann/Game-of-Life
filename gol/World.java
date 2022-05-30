@@ -1,7 +1,6 @@
 package gol;
 import utils.MathHelper;
 import java.awt.Graphics;
-import gol.Refer;
 /**
  * Fundamental rules for grid checking location + neighbours
  * Joel Bannister
@@ -19,7 +18,7 @@ public class World
     public void draw(Graphics graphics){
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[i].length;j++){
-                graphics.setColor(grid[i][j].getColour());
+                graphics.setColor(grid[i][j].getColor());
                 graphics.fillRect(i * Refer.cell_size, j * Refer.cell_size, Refer.cell_size, Refer.cell_size);
             }
         }
@@ -47,7 +46,7 @@ public class World
             for(int j=0;j<grid[i].length;j++){
                 countAlive = this.getNeighborCells(i, j);
                 //rules for deciding whether or not cell lives or dies
-                if(grid[i][j]== Cell.ALIVE) {
+                if(grid[i][j]== Cell.ALIVE) { 
 
                     if(countAlive > 3)
                         worldCopy[i][j] = Cell.DEAD;
@@ -73,7 +72,7 @@ public class World
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
                 try{
-                    if (world[i][j] == ALIVE && (x != i || y != j))
+                	if (grid [i][j] == Cell.ALIVE)
                         countAlive += 1;
                 } catch(ArrayIndexOutOfBoundsException e){
                     continue; //in case it counts anything out of bounds

@@ -9,7 +9,6 @@ import gol.World;
  * 23/05/22
  */
 
-import java.util.Random;
 
 public class Board extends JPanel
 {
