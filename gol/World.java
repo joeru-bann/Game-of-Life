@@ -10,10 +10,6 @@ import gol.World;
 
 public class World 
 {
-    private final int DEAD = 0;
-    private final int ALIVE = 1;
-    private int world[][];
-    private int worldCopy[][];
 
     private Cell[][] grid;
     
@@ -88,8 +84,4 @@ public class World
         else 
             return countAlive;
      }
-    }
-
-        
-  
-
+}
