@@ -6,7 +6,7 @@ package gol;
  * @Joel Bannister
  * 25/05
  */
-
+	
 public class Refer {
 
     public static final int world_width = 250;
@@ -14,5 +14,5 @@ public class Refer {
     
     public static final int cell_size = 3; //cell size compared to grid  
 
-    public static final int TIMER_DELAY = 20;
+    public static final int TIMER_DELAY = 70;
 }
