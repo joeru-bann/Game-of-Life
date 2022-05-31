@@ -1,87 +1,131 @@
-package gol;
-import gol.utils.MathHelper;
-import java.awt.Graphics;
-import gol.World;
+package gol; 
 /**
- * Fundamental rules for grid checking location + neighbours
- * Joel Bannister
- * 16.05.22
+ * @author (Joel Bannister)
+ * @version (10.5.22)
  */
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 
-public class World 
+public class Game
 {
+    public static int newRate = Game.refresh;
+	//reading input from the user
+    Scanner keyin = new Scanner(System.in);
+    String modeChoice;
+    boolean gameModePicked=false;
+    boolean random;
+    boolean rateChosen;
+    boolean fileBoard;
+    int choice = 0;
+    static int refresh;
+	private static int refresh_rate;
 
-    private Cell[][] grid;
-    
-    public void draw(Graphics graphics){
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[i].length;j++){
-                graphics.setColor(grid[i][j].getColor());
-                graphics.fillRect(i * Refer.cell_size, j * Refer.cell_size, Refer.cell_size, Refer.cell_size);
+    //variables begin/set up gamne
+    public Game()
+    {
+        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n"
+            + "How it goes: \n"
+        	+"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
+            +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
+        	+"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
+
+        System.out.println("Now, what do you feel like playing? \n"
+            +"Randomized (type (r), or (random),\n"
+            +" Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n"
+            +"choose your own map from file? (type File) \n" 
+            +"If you want to stop the game at any time, type quit");
+
+        while(!gameModePicked){
+            modeChoice=keyin.nextLine().toLowerCase();
+            if(modeChoice.equals("random") || (modeChoice.equals("r"))){
+                gameModePicked = true;
+                random = true;
+                choice = 1;
+
+            }else if (modeChoice.equals("#1")){
+                gameModePicked = true;
+                choice = 2;
+            }
+            else if (modeChoice.equals("#2")){
+                gameModePicked = true;
+                choice = 3;
+            }
+            else if (modeChoice.equals("#3")){
+                gameModePicked = true;
+                choice = 4;
+            }
+            else if (modeChoice.equals("file")){
+                gameModePicked = true;
+                fileBoard = true;
+                choice = 5;
+            }
+            else {
+                gameModePicked = false;
+                System.out.println("Please choose a valid option from above");
+                choice = 0;
+            }
+
+            if(gameModePicked){
+                new Board();
+
             }
         }
-    }
 
-    public World()  {
-        this.grid = new Cell[Refer.world_width][Refer.world_height];
-        for (int i=0;i<grid.length;i++){
-            for (int j=0;j<grid[i].length;j++){
-                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD;
-            }
-        }
-    }
-
-    public void update() {
-        int countAlive;
-        Cell[][] worldCopy = new Cell[Refer.world_width][Refer.world_height];
-       
-        for (int i=0;i<grid.length;i++){
-            for (int j=0;j<grid[i].length;j++){
+        switch (choice){
+            case 1: //random generation
+            	System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
+            	MainLoop.newRate = Game.refresh_rate;
             
-            	
-                countAlive = this.getNeighborCells(i, j);
-                //rules for deciding whether or not cell lives or dies
-                
-                if(grid[i][j]== Cell.ALIVE) {
+            	while (!rateChosen) {
+                	int rate = keyin.nextInt();
 
-                    if(countAlive > 3)
-                        worldCopy[i][j] = Cell.DEAD;
-                    else if (countAlive < 2)
-                        worldCopy[i][j] = Cell.DEAD;
-                    else
-                        worldCopy[i][j] = Cell.ALIVE;
+            		if (rate>10 && rate<1000) { //keeping the rate within reasonable limits
+            			System.out.println("Your refresh rate is: " + rate
+            					+ "\n You can change this by typing rate \n");
+            					refresh = rate;
+                		
+                		Window.create();
+    		               new MainLoop().start(); // if the rate is within limits, start game
+            			rateChosen = true;	
+            			}
+            		 else {
+            		System.out.println("please choose a valid number");
+            	}
+            }
+            	break;
+            	
+            	
+            case 5: //if using pre-made file
+                System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
+                File customFile=new File (keyin.nextLine());
+                try{
+                    try (Scanner fileRead = new Scanner(customFile)) {
+						while(fileRead.hasNextLine()){
+						    //reading the 0's and 1's of custom file
+						    int num;
+						    num = fileRead.nextInt();
+
+						    if (num == 1){
+						        System.out.println("*");
+						    }else if (num == 0){
+						        System.out.println(".");
+						    }else{
+						        System.out.println("error");
+						    }
+
+						}
+					}
                 }
-                else {
-                    if(countAlive == 3)
-                        worldCopy[i][j] = Cell.ALIVE;
-                    else
-                        worldCopy[i][j] = Cell.DEAD;
-                     }
-              }
-       }
-        
-        this.grid = worldCopy;
+                catch(IOException e) {
+                    //in case anything goes wrong
+                    e.printStackTrace();
+                }
+                break;
+
+            case 2: //premade board #1
+
+        }
 
     }
-
-    private int getNeighborCells(int x, int y) {
-        int countAlive = 0; 
-        //counting cells amount of alive neighbours
-        for (int i = x - 1; i <= x + 1; i++) {
-            for (int j = y - 1; j <= y + 1; j++) {
-                try{
-                	if (grid [i][j] == Cell.ALIVE)
-                        countAlive ++;
-                } catch(ArrayIndexOutOfBoundsException e){
-                    continue; //in case it counts anything out of bounds
-                }
-
-            } 
-        }
-        //subtract 1 to account for the cell itself (doesn't count as a neighbour)
-        if(grid[x][y] == Cell.ALIVE)
-            return countAlive - 1;
-        else 
-            return countAlive;
-     }
 }
