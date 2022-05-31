@@ -15,7 +15,7 @@ public class Game
     String modeChoice;
     boolean gameModePicked=false;
     boolean random;
-    boolean rateChosen = false;
+    boolean rateChosen;
     boolean fileBoard;
     int choice = 0;
     static int refresh;
@@ -31,16 +31,14 @@ public class Game
 
         //Game's rules explanation
         System.out.println("Now, what do you feel like playing? \n"
-            +"Randomized (type random),\n"
-            +" Board 1 (type #1),\n"
-            +" Board 2 (type #2),\n"
-            +" Board 3 (type #3),\n"
-            +" or choose your own map from file? (type File) \n" 
-            +"If you want to stop the game at any time, type stop");
+            +"Randomized (type (r), or (random),\n"
+            +" Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n"
+            +"choose your own map from file? (type File) \n" 
+            +"If you want to stop the game at any time, type quit");
 
         while(!gameModePicked){
             modeChoice=keyin.nextLine().toLowerCase();
-            if(modeChoice.equals("random")){
+            if(modeChoice.equals("random") || (modeChoice.equals("r"))){
                 gameModePicked = true;
                 random = true;
                 choice = 1;
@@ -79,34 +77,25 @@ public class Game
             	System.out.println("choose a cell refresh-rate between (10-1000)");
             	int rate = keyin.nextInt();
             
-            	while (!rateChosen)
-            		
+            	while (!rateChosen) {
             	
-            		if (rate<10 || rate>1000) {
-            			System.out.println("please choose a valid number");
-            			rateChosen = false;	
-            			}
-            		
-            		else if (rate>10 && rate<1000) {
+            		if (rate>10 && rate<1000) {
+            			System.out.println("Your refresh rate is: " + rate);
             			refresh = rate;
                 		
                 		Window.create();
     		               new MainLoop().start();
-    		               rateChosen = true;
-    		               
-            		} else {
+            			rateChosen = true;	
+            			}
+            		 else {
             		System.out.println("please choose a valid number");
-            		rateChosen = false;
+            		 rateChosen = false;
+            		 return;
             	}
-            		
+            }
+            	break;
             	
-           
-           
-            
- 
-            		
-                break;
-
+            	
             case 5: //if using pre-made file
                 System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
                 File customFile=new File (keyin.nextLine());
