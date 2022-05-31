@@ -9,7 +9,7 @@ import java.awt.Color;
 
 public enum Cell {
     
-    DEAD(Color.BLACK),
+    DEAD(Color.GRAY),
     ALIVE(Color.RED);
     
     private Color colour;

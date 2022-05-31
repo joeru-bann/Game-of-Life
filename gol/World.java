@@ -81,7 +81,7 @@ public class World
 
             } 
         }
-        //managing possible false-alives
+        //subtract 1 to account for the cell itself (doesn't count as a neighbour)
         if(grid[x][y] == Cell.ALIVE)
             return countAlive - 1;
         else 
