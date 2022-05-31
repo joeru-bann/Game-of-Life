@@ -111,20 +111,21 @@ public class Game
 
             case 5: //if using pre-made file
                 System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
-                File customFile=new File (keyin.nextLine());
+                String fileName = keyin.nextLine();
+                File customFile=new File (fileName);
                 try{
                     Scanner fileRead = new Scanner(customFile);
                     while(fileRead.hasNextLine()){
                         //reading the 0's and 1's of custom file
-                        int num;
-                        num = fileRead.nextInt();
+                        String num = fileRead.nextLine();
+                        System.out.print(num);
 
-                        if (num == 1){
-                            System.out.println("*");
-                        }else if (num == 1){
-                            System.out.println(".");
+                        if (num == "1"){
+                            System.out.print("*");
+                        }else if (num == "0"){
+                            System.out.print(".");
                         }else{
-                            System.out.println("placeholder");
+                            System.out.println(""); //every line's end doesn't print anything
                         }
 
                     }
