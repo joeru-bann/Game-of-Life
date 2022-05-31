@@ -19,7 +19,8 @@ public class MainLoop implements ActionListener
     private Timer timer;
     static boolean gameStarted;
     private JFrame window;
-    
+    int cmd = 0;    
+    int newRate;
     public MainLoop(){
         this.world = new World();
         this.timer = new Timer(Refer.refresh_rate, this);
@@ -33,15 +34,35 @@ public class MainLoop implements ActionListener
          while (gameStarted) {
             Scanner kb = new Scanner (System.in);
             	String endCmd = kb.nextLine();
-            	if (endCmd == "quit") {
-            		System.out.print("quit test");
+	
+            	
+            	if (endCmd.equals("quit")) {
+            		System.out.println("exit inputted, quitting..");
+            		Window.dispose();
+            		gameStarted = false;
+            		break;
+            	}
+            	else if (endCmd.equals("rate")) {
+            		System.out.println("Change cell rate to..?");
+            		newRate = kb.nextInt();
+            		Refer.refresh_rate = newRate;
+            		Game.refresh = Refer.refresh_rate;
+            	
+            		System.out.println("The new refresh rate is: " + Refer.refresh_rate + ", " + Game.refresh);
+
+            		gameStarted = true;
+                	
             	}
             	else {
+            		System.out.println("error");
             		System.out.println("quitting...");
             		Window.dispose();
             		gameStarted = false;
             		break;
             	}
+            	
+           
+            	
              
          }
        }
