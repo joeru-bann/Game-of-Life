@@ -2,8 +2,6 @@ package gol;
 
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import gol.Refer;
-import gol.World;
 public class Window {
 
     private static JFrame window;
@@ -18,7 +16,7 @@ public class Window {
         board = new Board();
         board.setPreferredSize(new Dimension(Refer.world_width * Refer.cell_size, Refer.world_height * Refer.cell_size));
         //board.setFocusable(true);
-        window.setContentPane(board);
+        window.setContentPane(board); // makes board the child component
         window.pack();
         window.setVisible(true);
     }
@@ -26,4 +24,12 @@ public class Window {
     public static void updateBoard(World renderWorld) {
         board.update(renderWorld);
     }
+
+	public static void dispose() {
+		window.setVisible(false);
+		window.dispose(); //closes window
+		System.exit(0);
+		
+		
+	}
 }
