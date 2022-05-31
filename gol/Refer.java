@@ -1,5 +1,4 @@
 package gol;
-import gol.Game;
 /**
  * definitions for world
  *
@@ -14,5 +13,5 @@ public class Refer {
     
     public static final int cell_size = 3; //cell size compared to grid  
 
-    public static final int refresh_rate = Game.refresh;
+    public static int newRate = Game.refresh;
 }
