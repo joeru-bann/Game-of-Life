@@ -5,7 +5,6 @@ package gol;
  */
 import java.util.Scanner;
 import java.io.File;
-import java.util.Random;
 import java.io.IOException;
 
 public class Game
@@ -18,7 +17,6 @@ public class Game
     boolean random;
     boolean rateChosen = false;
     boolean fileBoard;
-    boolean rateAccept = false;
     int choice = 0;
     static int refresh;
 
@@ -81,32 +79,28 @@ public class Game
             	System.out.println("choose a cell refresh-rate between (10-1000)");
             	int rate = keyin.nextInt();
             
-            	while (rate<10 || rate>1000) {
+            	while (!rateChosen)
             		
-            	 rateChosen = false;
-            	
             	
             		if (rate<10 || rate>1000) {
+            			System.out.println("please choose a valid number");
+            			rateChosen = false;	
+            			}
+            		
+            		else if (rate>10 && rate<1000) {
+            			refresh = rate;
+                		
+                		Window.create();
+    		               new MainLoop().start();
+    		               rateChosen = true;
+    		               
+            		} else {
             		System.out.println("please choose a valid number");
             		rateChosen = false;
             	}
- 	
-            	else if (rate>10 && rate<1000){
             		
-            		final int refresh_rate = rate;
-            		refresh = rate;
-            		
-            		Window.create();
-		               new MainLoop().start();
-		               rateChosen = true;
-		               rateAccept = true;
-            	}
-            	else {
-            		System.out.println("please choose a valid number");
-            		rateChosen = false;
-            		
-            	}
-           }
+            	
+           
            
             
  
@@ -117,21 +111,22 @@ public class Game
                 System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
                 File customFile=new File (keyin.nextLine());
                 try{
-                    Scanner fileRead = new Scanner(customFile);
-                    while(fileRead.hasNextLine()){
-                        //reading the 0's and 1's of custom file
-                        int num;
-                        num = fileRead.nextInt();
+                    try (Scanner fileRead = new Scanner(customFile)) {
+						while(fileRead.hasNextLine()){
+						    //reading the 0's and 1's of custom file
+						    int num;
+						    num = fileRead.nextInt();
 
-                        if (num == 1){
-                            System.out.println("*");
-                        }else if (num == 0){
-                            System.out.println(".");
-                        }else{
-                            System.out.println("error");
-                        }
+						    if (num == 1){
+						        System.out.println("*");
+						    }else if (num == 0){
+						        System.out.println(".");
+						    }else{
+						        System.out.println("error");
+						    }
 
-                    }
+						}
+					}
                 }
                 catch(IOException e) {
                     //in case anything goes wrong
