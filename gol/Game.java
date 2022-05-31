@@ -10,30 +10,35 @@ import java.io.IOException;
 
 public class Game
 {
-    //reading input from the user
+    public static int refresh_rate = Game.refresh;
+	//reading input from the user
     Scanner keyin = new Scanner(System.in);
     String modeChoice;
     boolean gameModePicked=false;
     boolean random;
-    boolean board1;
-    boolean board2;
-    boolean board3;
+    boolean rateChosen = false;
     boolean fileBoard;
+    boolean rateAccept = false;
     int choice = 0;
+    static int refresh;
 
     //variables begin/set up gamne
     public Game()
     {
         System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n"
-            + "This is the run down:\n");
+            + "How it goes: \n"
+        	+"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
+            +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
+        	+"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
 
         //Game's rules explanation
         System.out.println("Now, what do you feel like playing? \n"
-            +"Randomized (type random),"
-            +" Board 1 (type #1),"
-            +" Board 2 (type #2),"
-            +" Board 3 (type #3),"
-            +" or choose your own map from file? (type File)");
+            +"Randomized (type random),\n"
+            +" Board 1 (type #1),\n"
+            +" Board 2 (type #2),\n"
+            +" Board 3 (type #3),\n"
+            +" or choose your own map from file? (type File) \n" 
+            +"If you want to stop the game at any time, type stop");
 
         while(!gameModePicked){
             modeChoice=keyin.nextLine().toLowerCase();
@@ -44,17 +49,14 @@ public class Game
 
             }else if (modeChoice.equals("#1")){
                 gameModePicked = true;
-                board1 = true;
                 choice = 2;
             }
             else if (modeChoice.equals("#2")){
                 gameModePicked = true;
-                board2 = true;
                 choice = 3;
             }
             else if (modeChoice.equals("#3")){
                 gameModePicked = true;
-                board3 = true;
                 choice = 4;
             }
             else if (modeChoice.equals("file")){
@@ -76,7 +78,39 @@ public class Game
 
         switch (choice){
             case 1: //random gen
-                new Main();
+            	System.out.println("choose a cell refresh-rate between (10-1000)");
+            	int rate = keyin.nextInt();
+            
+            	while (rate<10 || rate>1000) {
+            		
+            	 rateChosen = false;
+            	
+            	
+            		if (rate<10 || rate>1000) {
+            		System.out.println("please choose a valid number");
+            		rateChosen = false;
+            	}
+ 	
+            	else if (rate>10 && rate<1000){
+            		
+            		final int refresh_rate = rate;
+            		refresh = rate;
+            		
+            		Window.create();
+		               new MainLoop().start();
+		               rateChosen = true;
+		               rateAccept = true;
+            	}
+            	else {
+            		System.out.println("please choose a valid number");
+            		rateChosen = false;
+            		
+            	}
+           }
+           
+            
+ 
+            		
                 break;
 
             case 5: //if using pre-made file
@@ -91,10 +125,10 @@ public class Game
 
                         if (num == 1){
                             System.out.println("*");
-                        }else if (num == 1){
+                        }else if (num == 0){
                             System.out.println(".");
                         }else{
-                            System.out.println("placeholder");
+                            System.out.println("error");
                         }
 
                     }
@@ -109,5 +143,5 @@ public class Game
 
         }
 
-    }                       
-}                                
+    }
+}
