@@ -9,17 +9,17 @@ import java.awt.Color;
 
 public enum Cell {
     
-    DEAD(Color.GRAY),
-    ALIVE(Color.RED);
+    DEAD(Color.BLACK),
+    ALIVE(Color.GREEN);
     
-    private Color colour;
+    private Color color;
     
     Cell(Color color) {
-        this.colour = colour;
+        this.color = color;
     }
     
-    public Color getColour() {
-        return colour;
+    public Color getColor() {
+        return color;
     }
 }
 
