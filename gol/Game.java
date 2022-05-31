@@ -30,7 +30,6 @@ public class Game
             +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
         	+"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
 
-        //Game's rules explanation
         System.out.println("Now, what do you feel like playing? \n"
             +"Randomized (type (r), or (random),\n"
             +" Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n"
@@ -74,26 +73,24 @@ public class Game
         }
 
         switch (choice){
-            case 1: //random gen
-            	System.out.println("choose a cell refresh-rate between (10-1000)");
+            case 1: //random generation
+            	System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
             	MainLoop.newRate = Game.refresh_rate;
             
             	while (!rateChosen) {
                 	int rate = keyin.nextInt();
 
-            		if (rate>10 && rate<1000) {
+            		if (rate>10 && rate<1000) { //keeping the rate within reasonable limits
             			System.out.println("Your refresh rate is: " + rate
             					+ "\n You can change this by typing rate \n");
-            					
-            			refresh = rate;
+            					refresh = rate;
                 		
                 		Window.create();
-    		               new MainLoop().start();
+    		               new MainLoop().start(); // if the rate is within limits, start game
             			rateChosen = true;	
             			}
             		 else {
             		System.out.println("please choose a valid number");
-            		 
             	}
             }
             	break;
