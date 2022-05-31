@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Game
 {
-    public static int refresh_rate = Game.refresh;
+    public static int newRate = Game.refresh;
 	//reading input from the user
     Scanner keyin = new Scanner(System.in);
     String modeChoice;
@@ -19,6 +19,7 @@ public class Game
     boolean fileBoard;
     int choice = 0;
     static int refresh;
+	private static int refresh_rate;
 
     //variables begin/set up gamne
     public Game()
@@ -75,12 +76,15 @@ public class Game
         switch (choice){
             case 1: //random gen
             	System.out.println("choose a cell refresh-rate between (10-1000)");
-            	int rate = keyin.nextInt();
+            	MainLoop.newRate = Game.refresh_rate;
             
             	while (!rateChosen) {
-            	
+                	int rate = keyin.nextInt();
+
             		if (rate>10 && rate<1000) {
-            			System.out.println("Your refresh rate is: " + rate);
+            			System.out.println("Your refresh rate is: " + rate
+            					+ "\n You can change this by typing rate \n");
+            					
             			refresh = rate;
                 		
                 		Window.create();
@@ -89,8 +93,7 @@ public class Game
             			}
             		 else {
             		System.out.println("please choose a valid number");
-            		 rateChosen = false;
-            		 return;
+            		 
             	}
             }
             	break;
