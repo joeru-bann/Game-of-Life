@@ -12,7 +12,7 @@ public class World
 {
 
     private Cell[][] grid;
-    
+
     public void draw(Graphics graphics){
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[i].length;j++){
@@ -34,14 +34,13 @@ public class World
     public void update() {
         int countAlive;
         Cell[][] worldCopy = new Cell[Refer.world_width][Refer.world_height];
-       
+
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
-            
-            	
+
                 countAlive = this.getNeighborCells(i, j);
                 //rules for deciding whether or not cell lives or dies
-                
+
                 if(grid[i][j]== Cell.ALIVE) {
 
                     if(countAlive > 3)
@@ -56,10 +55,10 @@ public class World
                         worldCopy[i][j] = Cell.ALIVE;
                     else
                         worldCopy[i][j] = Cell.DEAD;
-                     }
-              }
-       }
-        
+                }
+            }
+        }
+
         this.grid = worldCopy;
 
     }
@@ -70,7 +69,7 @@ public class World
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
                 try{
-                	if (grid [i][j] == Cell.ALIVE)
+                    if (grid [i][j] == Cell.ALIVE)
                         countAlive ++;
                 } catch(ArrayIndexOutOfBoundsException e){
                     continue; //in case it counts anything out of bounds
@@ -83,9 +82,17 @@ public class World
             return countAlive - 1;
         else 
             return countAlive;
-     }
     }
 
-        
-  
+    public void cusWorld(){
+        this.grid = new Cell[Refer.customWorld_width][Refer.customWorld_height];
+        for (int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[i].length;j++){
+                this.grid[i][j] = Game.custom;
+            }
+        }
+
+    
+    }
+}
 
