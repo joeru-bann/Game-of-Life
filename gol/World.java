@@ -10,6 +10,9 @@ import gol.World;
 
 public class World 
 {
+	int revolutions;
+    boolean update;
+    static boolean maxRev = false;
 
     private Cell[][] grid;
 
@@ -23,7 +26,7 @@ public class World
     }
 
     public World()  {
-        this.grid = new Cell[Refer.world_width][Refer.world_height];
+        this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
                 this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD;
@@ -33,7 +36,8 @@ public class World
 
     public void update() {
         int countAlive;
-        Cell[][] worldCopy = new Cell[Refer.world_width][Refer.world_height];
+        
+        Cell[][] worldCopy = new Cell[Game.cols][Game.rows];
 
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
@@ -58,11 +62,22 @@ public class World
                 }
             }
         }
-
         this.grid = worldCopy;
+        ++revolutions;
+	    System.out.println("total revolutions: " + revolutions);
+	    
+	    if (revolutions >= Game.gens) {
+	    	maxRev = true;
+            System.out.println("max generations reached.");
+    		Window.pause();
+    		//Window.dispose();
+        	 } 
 
-    }
+	    else if (revolutions <= Game.gens) {
+	    	maxRev = false;
+	    }
 
+}
     private int getNeighborCells(int x, int y) {
         int countAlive = 0; 
         //counting cells amount of alive neighbours
@@ -78,21 +93,12 @@ public class World
             } 
         }
         //subtract 1 to account for the cell itself (doesn't count as a neighbour)
-        if(grid[x][y] == Cell.ALIVE)
-            return countAlive - 1;
-        else 
+        if(grid[x][y] == Cell.ALIVE) {
+            return countAlive - 1;}
+        else {
             return countAlive;
     }
 
-    public void cusWorld(){
-        this.grid = new Cell[Refer.customWorld_width][Refer.customWorld_height];
-        for (int i=0;i<grid.length;i++){
-            for (int j=0;j<grid[i].length;j++){
-                this.grid[i][j] = Game.custom;
-            }
-        }
-
-    
-    }
+ 
+   }
 }
-
