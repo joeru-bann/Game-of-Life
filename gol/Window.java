@@ -14,10 +14,11 @@ public class Window {
         window.setResizable(false);
 
         board = new Board();
-        board.setPreferredSize(new Dimension(Refer.world_width * Refer.cell_size, Refer.world_height * Refer.cell_size));
-        //board.setFocusable(true);
+        board.setPreferredSize(new Dimension(Game.cols * Refer.cell_size, Game.rows * Refer.cell_size)); 
+        //multiplying dimensions together, result in proportionalality
+        board.setFocusable(true);
         window.setContentPane(board); // makes board the child component
-        window.pack();
+        window.pack(); //window fits size of subcompenents
         window.setVisible(true);
     }
 
@@ -25,10 +26,13 @@ public class Window {
         board.update(renderWorld);
     }
 
-	public static void dispose() {
+	public static void dispose() { // method to exit game 
 		window.setVisible(false);
-		window.dispose(); //closes window
+		window.dispose(); 
 		System.exit(0);
+	}
+		
+	public static void pause (){ //pausing game when generations have completed
 		
 		
 	}
