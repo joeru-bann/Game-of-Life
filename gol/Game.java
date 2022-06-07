@@ -1,4 +1,6 @@
 package gol; 
+import gol.World;
+
 /**
  * @author (Joel Bannister)
  * @version (10.5.22)
@@ -9,6 +11,9 @@ import java.io.IOException;
 
 public class Game
 {
+    public static int gens = 0;
+	public static int rows = 0;
+    public static int cols = 0;
     //reading input from the user
     Scanner keyin = new Scanner(System.in);
     String modeChoice;
@@ -17,23 +22,35 @@ public class Game
     boolean rateChosen;
     boolean fileBoard;
     int choice = 0;
-        static int refresh;
-        private static int refresh_rate;
-        public static int newRate = Game.refresh;
+    static String num;
+    static int refresh;
+    private static int refresh_rate;
+    public static int newRate = Game.refresh;
     //variables begin/set up gamne
-    public Game()
+    
+    
+    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
+    	try {
+    		Thread.sleep(time);
+    		} catch (Exception e) {}
+    }
+    public Game() 
     {
-        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n"
+        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n" 
             + "How it goes: \n"
             +"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
             +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
             +"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
 
-        System.out.println("Now, what do you feel like playing? \n"
-            +"Randomized (type (r), or (random),\n"
-            +" Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n"
-            +"choose your own map from file? (type File) \n" 
-            +"If you want to stop the game at any time, type quit");
+        System.out.println("Now, what do you feel like playing? \n");
+        sleep(500);
+        System.out.println("Randomized (type (r), or (random),\n");
+        sleep(500);
+        System.out.println("Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n");
+        sleep(500);
+        System.out.println("choose your own map from file? (type File) \n");
+        sleep(200);
+        System.out.println("If you want to stop the game at any time, type quit");
 
         while(!gameModePicked){
             modeChoice=keyin.nextLine().toLowerCase();
@@ -70,51 +87,70 @@ public class Game
 
             }
         }
-
+       
         switch (choice){
             case 1: //random generation
                 System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
                 MainLoop.newRate = Game.refresh_rate;
-            
+
                 while (!rateChosen) {
                     int rate = keyin.nextInt();
 
                     if (rate>10 && rate<1000) { //keeping the rate within reasonable limits
                         System.out.println("Your refresh rate is: " + rate
-                                + "\n You can change this by typing rate \n");
-                                refresh = rate;
-                        
-                        Window.create();
-                           new MainLoop().start(); // if the rate is within limits, start game
-                        rateChosen = true;  
-                        }
-                     else {
-                    System.out.println("please choose a valid number");
-                }
-            }
-                break;
-                
-                
-            case 5: //if using pre-made file
-                System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
-                File customFile=new File (keyin.nextLine());
-                try{
-                    try (Scanner fileRead = new Scanner(customFile)) {
-                        while(fileRead.hasNextLine()){
-                            //reading the 0's and 1's of custom file
-                            custom[][] = new [Refer.customWorld_width][Refer.customWorld_height];
-                            long num;
-                            num = fileRead.nextLong();
-                            int cols;
-                            int rows;
+                            + "\n You can change this by typing rate \n");
+                        refresh = rate;
 
-                            return custom;
-                        }
+                        cols = 300; //setting default window size
+                        rows = 160;
+                        
+                		sleep(1000); 
+
+                        System.out.println("How many generations do you want?");
+                        gens = keyin.nextInt();
+
+                        Window.create();
+                        new MainLoop().start(); // if the rate is within limits, start game
+                        rateChosen = true;  
+                    }
+                    else {
+                        System.out.println("please choose a valid number");
                     }
                 }
+                break;
+
+            case 5: //if using pre-made file
+                System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
+               
+                String fileName = keyin.nextLine();
+                File customFile = new File (fileName);
+                
+        		sleep(1000);
+
+                System.out.println("how many rows is your custom grid?");
+                rows = keyin.nextInt();
+        		sleep(1000);
+
+                System.out.println("how many columns is your custom grid?");
+                cols = keyin.nextInt();
+
+                try  {
+                    System.out.println("Printing board...");
+
+                	Scanner fileRead = new Scanner(customFile);
+                    while(fileRead.hasNextLine()){
+                       // System.out.println(fileRead.nextLine()); : troubleshooting
+                        
+                        Window.create();
+                        new MainLoop().start();
+                    }
+
+                }
+
                 catch(IOException e) {
                     //in case anything goes wrong
                     e.printStackTrace();
+                    System.out.println("An error occured while trying to fetch the file name entered");
                 }
                 break;
 
