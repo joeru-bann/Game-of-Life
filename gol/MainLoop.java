@@ -21,22 +21,40 @@
 	    private JFrame window;
 	    int cmd = 0;    
 	    static int newRate;
+	    boolean maxRev;
+	    static boolean endTimer = false;
+	    
+	    
+	    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
+	    	try {
+	    		Thread.sleep(time);
+	    		} catch (Exception e) {}
+	    }
+	    
 	    public MainLoop(){
 	        this.world = new World();
 	        this.timer = new Timer(Refer.newRate, this);
 	        
 	        }
-	    
 	
 	    public void start(){
-	        this.timer.start(); //timer begins
 	         gameStarted = true;
-	         while (gameStarted) {
+	         maxRev = false;
+	         
+	         while (endTimer) {
+	        	 System.out.println("game has ended");
+	        	 this.timer.stop();
+	         }
+		            		
+
+	         while (gameStarted) {	   
+	        
+	 	        this.timer.start(); //timer begins
+
 	            Scanner kb = new Scanner (System.in);
 	            	String endCmd = kb.nextLine();
-		
 	            	
-	            	if (endCmd.equals("quit")) {
+	            	if (endCmd.equals("quit") || endCmd.equals("q")) {
 	            		System.out.println("exit inputted, quitting..");
 	            		Window.dispose();
 	            		gameStarted = false;
@@ -58,9 +76,6 @@
 	            		break;
 	            	}
 	            	
-	           
-	            	
-	             
 	         }
 	       }
 	    
@@ -68,8 +83,7 @@
 	    public void actionPerformed(ActionEvent e){
 	        Window.updateBoard(world);
 	        this.world.update();
-	        
-	          
+          
 	    		}
-	    
+
 	}
