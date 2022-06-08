@@ -19,7 +19,7 @@ public class World
     public void draw(Graphics graphics){
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[i].length;j++){
-                graphics.setColor(grid[i][j].getColor());
+                graphics.setColor(grid[i][j].getColor()); //colouring the cells
                 graphics.fillRect(i * Refer.cell_size, j * Refer.cell_size, Refer.cell_size, Refer.cell_size);
             }
         }
@@ -29,7 +29,7 @@ public class World
         this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
-                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD;
+                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD; //makes a random grid of either alive, or dead cells
             }
         }
     }
@@ -43,7 +43,7 @@ public class World
             for (int j=0;j<grid[i].length;j++){
 
                 countAlive = this.getNeighborCells(i, j);
-                //rules for deciding whether or not cell lives or dies
+                //rules for deciding whether or not cell lives or dies (based off original rules)
 
                 if(grid[i][j]== Cell.ALIVE) {
 
@@ -70,7 +70,6 @@ public class World
 	    	maxRev = true;
             System.out.println("max generations reached.");
     		Window.pause();
-    		//Window.dispose();
         	 } 
 
 	    else if (revolutions <= Game.gens) {
@@ -78,9 +77,9 @@ public class World
 	    }
 
 }
-    private int getNeighborCells(int x, int y) {
+    private int getNeighborCells(int x, int y) {    //counting amount of alive cell neighbours
+
         int countAlive = 0; 
-        //counting cells amount of alive neighbours
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
                 try{
