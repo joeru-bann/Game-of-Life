@@ -104,15 +104,11 @@
 	    public static void gameRestart () {
 	    	if (Window.continueGame = true) {
             Scanner kb = new Scanner (System.in);
-			Game.gens = 0; //reset total generations
-				System.out.println(Game.gens + " game gens - gameRestart,");
-
-			System.out.println("How many more generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
-                Game.gens = kb.nextInt();   
-                
- 				System.out.println("continuing with " + Game.gens + " more generations..");
-
-				
+            	Game.gens = 0;
+				System.out.println("How many more generations?");
+				Game.gens =kb.nextInt();
+				System.out.println("continuing with " + Game.gens + " more generations..");
+	
 				new MainLoop().continueStart(); System.out.println("started loop - mainloop");
 				Window.continueGame = false; //ending loop
 				gameStarted = true;
@@ -130,6 +126,32 @@
 		    	System.out.println(world.revolutions + " revolutions begin - mainloop");
 	    	
 	    }
+	    
+	    public static void gameInitiate () {
+	    		    
+	    	if (Window.continueGame = true) {
+	            Scanner kb = new Scanner (System.in);
+				Game.gens = 0; //reset total generations
+					System.out.println(Game.gens + " game gens - gameInitiate,");
+
+				System.out.println("How many generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
+	                Game.gens = kb.nextInt();   
+	                
+	 				System.out.println("continuing with " + Game.gens + " more generations..");
+					new MainLoop().initiateStart(); 
+					//Window.create(); System.out.println("window create - gameinitiate");
+					Window.continueGame = false; //ending loop
+					gameStarted = true;
+					Window.random = false;
+	    	}
+	    }
+	    	public void initiateStart() { //for starting a new game from option "new"
+		    	System.out.println("initiateStart - mainloop");
+		    	
+		         maxRev = false;
+	             endTimer = false;
+	             System.out.println(world.revolutions + " revolutions begin - mainloop");
+	    	}
 	
 	    
 	    @Override //overide for actionlistener
