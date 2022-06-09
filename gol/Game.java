@@ -4,10 +4,12 @@ import gol.World;
 /**
  * @author (Joel Bannister)
  * @version (10.5.22)
+ * main intro/game picker options
  */
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
+import java.util.InputMismatchException;  
 
 public class Game
 {
@@ -45,18 +47,17 @@ public class Game
         System.out.println("Now, what do you feel like playing? \n");
         sleep(500);
         System.out.println("Randomized (type (r), or (random),\n");
-        sleep(500);
+        sleep(300);
         System.out.println("Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n");
-        sleep(500);
+        sleep(300);
         System.out.println("choose your own map from file? (type File) \n");
-        sleep(200);
+        sleep(300);
         System.out.println("If you want to stop the game at any time, type quit");
 
         while(!gameModePicked){
-            modeChoice=keyin.nextLine().toLowerCase();
+            modeChoice=keyin.nextLine().toLowerCase(); //lower case allows input to be non case-sensitive
             if(modeChoice.equals("random") || (modeChoice.equals("r"))){
                 gameModePicked = true;
-                random = true;
                 choice = 1;
 
             }else if (modeChoice.equals("#1")){
@@ -82,10 +83,7 @@ public class Game
                 choice = 0;
             }
 
-            if(gameModePicked){
-                new Board();
-
-            }
+           
         }
        
         switch (choice){
@@ -96,7 +94,7 @@ public class Game
                 while (!rateChosen) {
                     int rate = keyin.nextInt();
 
-                    if (rate>10 && rate<1000) { //keeping the rate within reasonable limits
+                    if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
                         System.out.println("Your refresh rate is: " + rate
                             + "\n You can change this by typing rate \n");
                         refresh = rate;
@@ -104,19 +102,28 @@ public class Game
                         cols = 300; //setting default window size
                         rows = 160;
                         
-                		sleep(1000); 
+                		sleep(300); 
 
-                        System.out.println("How many generations do you want?");
+                       try { System.out.println("How many generations do you want? (do smaller amounts e.g 10-80 for refresh-rates over 300");
                         gens = keyin.nextInt();
+                       } catch (InputMismatchException ex) {  
+                           System.out.println("please choose a valid number");
+                           break;
+                        }  
+                       
+                       Window.create(); System.out.println("created window - game");//creates new board
+            
+                       new MainLoop().start(); // if the rate is within limits, start game
+                       
+                       rateChosen = true;  
+                        random = true;
+                    } 
 
-                        Window.create();
-                        new MainLoop().start(); // if the rate is within limits, start game
-                        rateChosen = true;  
-                    }
                     else {
                         System.out.println("please choose a valid number");
                     }
-                }
+                    
+                } 
                 break;
 
             case 5: //if using pre-made file
@@ -125,14 +132,19 @@ public class Game
                 String fileName = keyin.nextLine();
                 File customFile = new File (fileName);
                 
-        		sleep(1000);
+        		sleep(600);
 
                 System.out.println("how many rows is your custom grid?");
                 rows = keyin.nextInt();
-        		sleep(1000);
+        		sleep(600);
 
                 System.out.println("how many columns is your custom grid?");
                 cols = keyin.nextInt();
+        		sleep(600);
+
+                
+                System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
+                int rate = keyin.nextInt();
 
                 try  {
                     System.out.println("Printing board...");
