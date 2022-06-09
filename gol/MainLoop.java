@@ -18,11 +18,13 @@
 	    private World world;
 	    private Timer timer;
 	    static boolean gameStarted;
-	    private JFrame window;
+	    private static JFrame window;
+	    static boolean random = false; 
 	    int cmd = 0;    
 	    static int newRate;
 	    boolean maxRev;
 	    static boolean endTimer = false;
+	    static boolean newGame = false;
 	    
 	    
 	    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
@@ -31,26 +33,48 @@
 	    		} catch (Exception e) {}
 	    }
 	    
+
 	    public MainLoop(){
-	        this.world = new World();
-	        this.timer = new Timer(Refer.newRate, this);
+ 	         this.timer = new Timer(Refer.newRate, this);
+			 this.world = new World(); 
+
+
+			 System.out.println("new world - start mainloop");
+
 	        
-	        }
-	
-	    public void start(){
-	         gameStarted = true;
-	         maxRev = false;
-	         
-	         while (endTimer) {
+	    		if (Window.random = false) {
+	    		System.out.println("mainloop random = false - mainloop");	
+	    		}
+	    		else if (Window.random = true) {
+	    		}
+	    		else {
+		    		System.out.println("mainloop random = false - mainloop");	
+	    		}
+	          
+	    	}
+	    
+	    public void timerStop() {
+	         while (endTimer = true) {
 	        	 System.out.println("game has ended");
 	        	 this.timer.stop();
+	        	 break;
 	         }
-		            		
+		  } 	
+	
+	    public void start(){
+	 	     this.timer.start(); //timer begins
 
-	         while (gameStarted) {	   
-	        
-	 	        this.timer.start(); //timer begins
+	    	System.out.println("start - mainloop");
+	    	 random = false;
+             Window.random = true;
+	    	
+	         maxRev = false;
+             endTimer = false;
+	 	     this.timer.start(); //timer begins
+		    	System.out.println(world.revolutions + " revolutions starting");
 
+		   	
+	         while (gameStarted = false) {	   
 	            Scanner kb = new Scanner (System.in);
 	            	String endCmd = kb.nextLine();
 	            	
@@ -69,8 +93,7 @@
 	            		gameStarted = true;	
 	            	}
 	            	else {
-	            		System.out.println("error");
-	            		System.out.println("quitting...");
+	            		System.out.println("error, quitting game");
 	            		Window.dispose();
 	            		gameStarted = false;
 	            		break;
@@ -78,6 +101,36 @@
 	            	
 	         }
 	       }
+	    public static void gameRestart () {
+	    	if (Window.continueGame = true) {
+            Scanner kb = new Scanner (System.in);
+			Game.gens = 0; //reset total generations
+				System.out.println(Game.gens + " game gens - gameRestart,");
+
+			System.out.println("How many more generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
+                Game.gens = kb.nextInt();   
+                
+ 				System.out.println("continuing with " + Game.gens + " more generations..");
+
+				
+				new MainLoop().continueStart(); System.out.println("started loop - mainloop");
+				Window.continueGame = false; //ending loop
+				gameStarted = true;
+				Window.random = false;
+			}
+		}
+	    
+	    
+	    public void continueStart() {
+	    	System.out.println("continueStart - mainloop");
+	    	
+	         maxRev = false;
+             endTimer = false;
+
+		    	System.out.println(world.revolutions + " revolutions begin - mainloop");
+	    	
+	    }
+	
 	    
 	    @Override //overide for actionlistener
 	    public void actionPerformed(ActionEvent e){
@@ -85,5 +138,5 @@
 	        this.world.update();
           
 	    		}
-
+	    
 	}
