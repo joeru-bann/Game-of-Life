@@ -12,6 +12,7 @@ public class World
 {
 	int revolutions;
     boolean update;
+    int finalRevs;
     static boolean maxRev = false;
 
     private Cell[][] grid;
@@ -26,11 +27,14 @@ public class World
     }
 
     public World()  {
+    	if (Window.random = true) {
         this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
-                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD; //makes a random grid of either alive, or dead cells
+                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD; 
+              }//makes a random grid of either alive, or dead cells
             }
+        
         }
     }
 
@@ -65,11 +69,18 @@ public class World
         this.grid = worldCopy;
         ++revolutions;
 	    System.out.println("total revolutions: " + revolutions);
+	     //deleting message with backspaces 
 	    
-	    if (revolutions >= Game.gens) {
+	    if (revolutions >= Game.gens) { //stopping game when loop reaches specified amount of generations
+	    	finalRevs = Game.gens;
+	        Window.random = false;
+	    	revolutions = finalRevs; 
 	    	maxRev = true;
-            System.out.println("max generations reached.");
+	    	MainLoop.endTimer = true;
+	    	MainLoop.gameStarted = false;
     		Window.pause();
+    		revolutions = 0;
+    		System.out.println(" \n");
         	 } 
 
 	    else if (revolutions <= Game.gens) {
