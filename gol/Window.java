@@ -69,18 +69,15 @@ public class Window {
          		
          	         		
          		if (choice.equals("new")) {
-         			window.dispose();
     				Game.gens = 0; //reset total generations
-         			System.out.println("How many generations do you want?");
-                    Game.gens = kb.nextInt();  
                     random = true;
+         			//window.dispose();
                     System.out.println("creating new game...");
                     sleep(1500);
-         			Window.create();
-
-                    new MainLoop().start();
-                    
+         			Window.newGame();
+     				MainLoop.random = true;
          			MainLoop.gameStarted = true;
+     				continueGame = true;
          			break;
          		}
          			else if (choice.equals("end") || (choice.equals("e"))) {
@@ -93,7 +90,6 @@ public class Window {
              				System.out.print("1..");
              				sleep(600);
              				
-
          				Window.dispose();
  	            		System.exit(0);
  	            		window.setVisible(false);
@@ -109,7 +105,7 @@ public class Window {
          					System.out.println("random is false");
          				}
          				else {
-         					System.out.println("window random is true");
+         					System.out.println("window random is true/else");
 
          				}
          				break;
@@ -123,7 +119,13 @@ public class Window {
 	public static void unPause () {
 		System.out.println("unpause");
 			World.maxRev = false;
-			MainLoop.gameRestart();	
+			MainLoop.gameRestart();
+			
 		}
-	
+	public static void newGame () {
+		System.out.println("newGame - window");
+			World.maxRev = false;
+			MainLoop.gameInitiate();
+			
+		}
 }
