@@ -9,6 +9,11 @@ public class Window {
 
     private static JFrame window;
     private static Board board;
+    static String choice;
+    static Scanner kb = new Scanner (System.in);
+    static boolean newGame = false;
+    static boolean continueGame = false;
+    static boolean random = false;
     
     public static void sleep(int time) { // function to help reading process be smoother experience by pausing
     	try {
@@ -22,7 +27,7 @@ public class Window {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
 
-        board = new Board();
+        board = new Board(); System.out.println("created board - window");
         board.setPreferredSize(new Dimension(Game.cols * Refer.cell_size, Game.rows * Refer.cell_size)); 
         //multiplying dimensions together, result in proportionalality
         board.setFocusable(true);
@@ -31,7 +36,6 @@ public class Window {
         window.setVisible(true);
         
     }
-    
 
     public static void updateBoard(World renderWorld) {
         board.update(renderWorld);
@@ -44,35 +48,80 @@ public class Window {
 	}
 	
 	
-	
-		
-	public static void pause (){ //pausing game when generations have completed
-		
-	            Scanner kb = new Scanner (System.in);
 
-         		System.out.println("All " + Game.gens + " generations, have completed.");
+	public static void pause (){ //pausing game when generations have completed
+		if (random = false) {
+			System.out.println("random is false");
+		}
+		else {
+			System.out.println("window random is true");
+
+		}
+		
+
+		System.out.println("All " + Game.gens + " generations, have completed. \n");
+ 		System.out.println("new game? type (new), exit game: type (end) or (e), or conintue (c)");
+ 		choice = kb.nextLine().toLowerCase();
+ 		World.maxRev = true;
+				
+		while(World.maxRev = true) {
+
          		
-         		
-         		System.out.println("new game? type (new), exit game: type (quit) or (q)");
-         		String choice = kb.nextLine().toLowerCase();
          	         		
          		if (choice.equals("new")) {
+         			sleep(1500);
+         			window.dispose();
+    				Game.gens = 0; //reset total generations
          			System.out.println("creating new game...");
-         			sleep(3000);
-         			new Main();
+         			System.out.println("How many more generations? (do smaller amounts e.g 10-80 for refresh-rates over 400");
+                    Game.gens = kb.nextInt();  
+                    random = true;
+         			Window.create();
+                    new MainLoop().start();
+         			MainLoop.gameStarted = true;
+         			break;
          		}
-         			else if (choice.equals("quit") || choice.equals("q")){
-             			System.out.println("quitting...");
+         			else if (choice.equals("end") || (choice.equals("e"))) {
+             			System.out.print("quitting in: ");
+
+             				System.out.print("3, ");
+             				sleep(600);
+             				System.out.print("2, ");
+             				sleep(600);
+             				System.out.print("1..");
+             				sleep(600);
+             				
+
          				Window.dispose();
  	            		System.exit(0);
  	            		window.setVisible(false);
  	            		MainLoop.endTimer = true;
          			}
-         		
-         			else if (!choice.equals("quit") || !choice.equals("new") || !choice.equals("q")){
-         				System.out.println("please choice an option from above");
-         				
+         			else if (choice.equals("c")) {
+         		    	MainLoop.endTimer = true;
+         				continueGame = true;
+         				Window.unPause();
+         				random = false;
+         				MainLoop.random = false;
+         				if (Window.random = false) {
+         					System.out.println("random is false");
+         				}
+         				else {
+         					System.out.println("window random is true");
+
+         				}
+         				break;
+         			}	
+         			else {
+         				System.out.println("error: please choice an option from above");
+             			break;
          			}
- 	 }
+ 	   }
+	}
+	public static void unPause () {
+		System.out.println("unpause");
+			World.maxRev = false;
+			MainLoop.gameRestart();		
+		}
 	
 }
