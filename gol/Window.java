@@ -69,15 +69,17 @@ public class Window {
          		
          	         		
          		if (choice.equals("new")) {
-         			sleep(1500);
          			window.dispose();
     				Game.gens = 0; //reset total generations
-         			System.out.println("creating new game...");
-         			System.out.println("How many more generations? (do smaller amounts e.g 10-80 for refresh-rates over 400");
+         			System.out.println("How many generations do you want?");
                     Game.gens = kb.nextInt();  
                     random = true;
+                    System.out.println("creating new game...");
+                    sleep(1500);
          			Window.create();
+
                     new MainLoop().start();
+                    
          			MainLoop.gameStarted = true;
          			break;
          		}
@@ -121,7 +123,7 @@ public class Window {
 	public static void unPause () {
 		System.out.println("unpause");
 			World.maxRev = false;
-			MainLoop.gameRestart();		
+			MainLoop.gameRestart();	
 		}
 	
 }
