@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import javax.swing.JFrame;
 
-public class Window {
+public class Window { 
 
     private static JFrame window;
     private static Board board;
@@ -55,7 +55,6 @@ public class Window {
 		}
 		else {
 			System.out.println("window random is true");
-
 		}
 		
 
@@ -65,9 +64,7 @@ public class Window {
  		World.maxRev = true;
 				
 		while(World.maxRev = true) {
-
-         		
-         	         		
+	
          		if (choice.equals("new")) {
     				Game.gens = 0; //reset total generations
                     random = true;
@@ -101,17 +98,19 @@ public class Window {
          				Window.unPause();
          				random = false;
          				MainLoop.random = false;
+         				
          				if (Window.random = false) {
          					System.out.println("random is false");
          				}
          				else {
          					System.out.println("window random is true/else");
-
          				}
          				break;
          			}	
          			else {
          				System.out.println("error: please choice an option from above");
+         				World.maxRev = false;
+         				continueGame = false;
              			break;
          			}
  	   }
@@ -120,8 +119,8 @@ public class Window {
 		System.out.println("unpause");
 			World.maxRev = false;
 			MainLoop.gameRestart();
-			
-		}
+			}
+	
 	public static void newGame () {
 		System.out.println("newGame - window");
 			World.maxRev = false;
