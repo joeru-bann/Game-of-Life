@@ -25,7 +25,7 @@
 	    boolean maxRev;
 	    static boolean endTimer = false;
 	    static boolean newGame = false;
-	    
+	    int rate;
 	    
 	    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
 	    	try {
@@ -128,14 +128,24 @@
 	    }
 	    
 	    public static void gameInitiate () {
-	    		    
+            Scanner kb = new Scanner (System.in);
+            newRate = Game.refresh_rate;
+
+			 System.out.println("choose a new cell refresh-rate ");
+               int rate = kb.nextInt();
+
+               if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
+            	   Game.refresh = rate;
+                   Refer.newRate = Game.refresh;
+                   System.out.println("Your new refresh rate is: " + rate);
+                		   
+                   System.out.println(Refer.newRate);
 	    	if (Window.continueGame = true) {
-	            Scanner kb = new Scanner (System.in);
 				Game.gens = 0; //reset total generations
-					System.out.println(Game.gens + " game gens - gameInitiate,");
 
 				System.out.println("How many generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
 	                Game.gens = kb.nextInt();   
+	                
 	                
 	 				System.out.println("continuing with " + Game.gens + " more generations..");
 					new MainLoop().initiateStart(); 
@@ -143,6 +153,7 @@
 					Window.continueGame = false; //ending loop
 					gameStarted = true;
 					Window.random = false;
+	    		}
 	    	}
 	    }
 	    	public void initiateStart() { //for starting a new game from option "new"
