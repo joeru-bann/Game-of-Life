@@ -26,7 +26,7 @@ public class Game
     int choice = 0;
     static String num;
     static int refresh;
-    private static int refresh_rate;
+    static int refresh_rate;
     public static int newRate = Game.refresh;
     //variables begin/set up gamne
     
@@ -97,10 +97,10 @@ public class Game
                     if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
                         System.out.println("Your refresh rate is: " + rate
                             + "\n You can change this by typing rate \n");
-                        refresh = rate;
+                        Game.refresh_rate = rate;
 
-                        cols = 300; //setting default window size
-                        rows = 160;
+                        cols = 800; //setting default window size
+                        rows = 500;
                         
                 		sleep(300); 
 
@@ -118,7 +118,6 @@ public class Game
                        rateChosen = true;  
                         random = true;
                     } 
-
                     else {
                         System.out.println("please choose a valid number");
                     }
@@ -126,7 +125,7 @@ public class Game
                 } 
                 break;
 
-            case 5: //if using pre-made file
+            case 5: //if using pre-made file 
                 System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
                
                 String fileName = keyin.nextLine();
