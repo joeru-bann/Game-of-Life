@@ -1,5 +1,4 @@
 package gol; 
-import gol.World;
 
 /**
  * @author (Joel Bannister)
@@ -18,16 +17,20 @@ public class Game
     public static int cols = 0;
     //reading input from the user
     Scanner keyin = new Scanner(System.in);
+    String intro;
+    boolean introChosen = false;
     String modeChoice;
-    boolean gameModePicked=false;
+    boolean gameModePicked = false;
+    static String cellChange;
     boolean random;
     boolean rateChosen;
     boolean fileBoard;
     int choice = 0;
     static String num;
-    static int refresh;
     static int refresh_rate;
-    public static int newRate = Game.refresh;
+    public static int refresh = Refer.newRate;
+    boolean cellSelect = false;
+
     //variables begin/set up gamne
     
     
@@ -36,25 +39,43 @@ public class Game
     		Thread.sleep(time);
     		} catch (Exception e) {}
     }
+ 
     public Game() 
     {
-        System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n" 
-            + "How it goes: \n"
-            +"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
-            +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
-            +"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
-
-        System.out.println("Now, what do you feel like playing? \n");
-        sleep(500);
-        System.out.println("Randomized (type (r), or (random),\n");
-        sleep(300);
-        System.out.println("Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n");
-        sleep(300);
-        System.out.println("choose your own map from file? (type File) \n");
-        sleep(300);
-        System.out.println("If you want to stop the game at any time, type quit");
+    	System.out.println("read introduction? or skip:  type r/read, or s/skip");
+    	while (!introChosen){
+    	intro = keyin.nextLine().toLowerCase(); //lower case allows input to be non case-sensitive
+        if(intro.equals("read") || (intro.equals("r"))) {
+        	   introChosen = true;
+        	   System.out.println("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n" 
+        	            + "How it goes: \n"
+        	            +"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
+        	            +"Board 1/2/3, all of which are pre-made boards created for you that look pretty cool \n"
+        	            +"Potentially, you can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
+        	        
+        } 
+        else if (intro.equals("skip") || (intro.equals("s"))) {
+        	introChosen = true;
+        }
+        else {
+        	System.out.print("please choose an intro option..");
+        	introChosen = false;
+        }
+    }
+        	
 
         while(!gameModePicked){
+        	
+	        	System.out.println("What do you feel like playing? \n");
+		        sleep(500);
+		        System.out.println("Randomized type r/random,\n");
+		        sleep(300);
+		        System.out.println("Board 1, Board 2, Board 3 (type either #1, #2, #3, respectively),\n");
+		        sleep(300);
+		        System.out.println("choose your own map from file? (type File) \n");
+		        sleep(300);
+		        System.out.println("If you want to stop the game at any time, type quit");
+		        
             modeChoice=keyin.nextLine().toLowerCase(); //lower case allows input to be non case-sensitive
             if(modeChoice.equals("random") || (modeChoice.equals("r"))){
                 gameModePicked = true;
@@ -89,43 +110,39 @@ public class Game
         switch (choice){
             case 1: //random generation
                 System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
-                MainLoop.newRate = Game.refresh_rate;
-
+           
                 while (!rateChosen) {
                     int rate = keyin.nextInt();
 
                     if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
                         System.out.println("Your refresh rate is: " + rate
                             + "\n You can change this by typing rate \n");
-                        Game.refresh_rate = rate;
-
-                        cols = 800; //setting default window size
-                        rows = 500;
-                        
+                        refresh = rate;
                 		sleep(300); 
 
-                       try { System.out.println("How many generations do you want? (do smaller amounts e.g 10-80 for refresh-rates over 300");
-                        gens = keyin.nextInt();
-                       } catch (InputMismatchException ex) {  
-                           System.out.println("please choose a valid number");
-                           break;
-                        }  
+                        cols = 300; //setting default window size
+                        rows = 160;   
+                        
                        
-                       Window.create(); System.out.println("created window - game");//creates new board
-            
-                       new MainLoop().start(); // if the rate is within limits, start game
-                       
-                       rateChosen = true;  
+                        rateChosen = true;  
                         random = true;
+                        
+                        System.out.println("created window - game");
+                    	gens = 1;
+                    	Window.create();//creates new board
+                     	 new MainLoop().cellPause(); // if the rate is within limits, start game
+                      
                     } 
                     else {
-                        System.out.println("please choose a valid number");
+                    	System.out.println("please choose a valid number");
+                    	cellSelect = false;
+                       }             
+                    break;
                     }
-                    
-                } 
-                break;
+                         
 
             case 5: //if using pre-made file 
+            	while (choice == 5) {
                 System.out.println("please enter the exact name of your custom file (incl .txt - must be in game directory)");
                
                 String fileName = keyin.nextLine();
@@ -152,22 +169,20 @@ public class Game
                     while(fileRead.hasNextLine()){
                        // System.out.println(fileRead.nextLine()); : troubleshooting
                         
-                        Window.create();
+                        new Window();
+                        sleep(2000);
                         new MainLoop().start();
                     }
-
                 }
-
                 catch(IOException e) {
                     //in case anything goes wrong
                     e.printStackTrace();
                     System.out.println("An error occured while trying to fetch the file name entered");
                 }
                 break;
+            }
 
             case 2: //premade board #1
-
         }
-
     }
 }
