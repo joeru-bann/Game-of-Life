@@ -12,7 +12,9 @@ public class World
 {
 	int revolutions;
     boolean update;
-    int finalRevs;
+    static int finalRevs;;
+    int x;
+    int y;
     static boolean maxRev = false;
 
     private Cell[][] grid;
@@ -28,6 +30,7 @@ public class World
 
     public World()  {
     	if (Window.random = true) {
+    		revolutions = 0;
         this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
@@ -68,11 +71,14 @@ public class World
         }
         this.grid = worldCopy;
         ++revolutions;
+        
+        if (Game.gens != 2) { //to not print out first pause generations 
 	    System.out.println("total revolutions: " + revolutions);
-	     //deleting message with backspaces 
-	    
+        }
+        
 	    if (revolutions >= Game.gens) { //stopping game when loop reaches specified amount of generations
 	    	finalRevs = Game.gens;
+	    	
 	        Window.random = false;
 	    	revolutions = finalRevs; 
 	    	maxRev = true;
@@ -108,7 +114,24 @@ public class World
         else {
             return countAlive;
     }
-
  
    }
-}
+		public void cellChange() {	
+			int Col = MainLoop.chooseCol;
+			int Row = MainLoop.chooseRow;
+			
+				System.out.println("chosen cell true : World : cellChange");
+				if(grid[Col][Row] == Cell.ALIVE) {
+					(grid[Col][Row]) = Cell.DEAD;
+				}	
+				else if (grid[Col][Row] == Cell.DEAD) {
+					System.out.println("grid x,y = celldead : World : cellChange");
+					(grid[Col][Row]) = Cell.ALIVE;
+				}
+				System.out.println("starting edited game");
+				System.out.println();
+
+				 
+			}
+		}
+
