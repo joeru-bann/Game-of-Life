@@ -25,92 +25,98 @@
 	    boolean maxRev;
 	    static boolean endTimer = false;
 	    static boolean newGame = false;
-	    int rate;
+	    static boolean chosenCell = false;
+	    static int chooseRow;
+	    static int chooseCol;
+	    static String cellChange;
+	    static boolean mainLoop;
+	    
 	    
 	    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
 	    	try {
 	    		Thread.sleep(time);
 	    		} catch (Exception e) {}
+	        }
+	      
+	    public MainLoop(){
+	    	
+ 	        // this.timer = new Timer(Refer.newRate, this);
+			// this.world = new World();  System.out.println("new world - mainloop");
+			// this.timer.start();
 	    }
 	    
+		 public void cellPause() { //to pause for cell selection
+	 	        this.timer = new Timer(Refer.newRate, this);
+	 	        this.world = new World();  System.out.println("new world - mainloop");
+				this.timer.start();
 
-	    public MainLoop(){
- 	         this.timer = new Timer(Refer.newRate, this);
-			 this.world = new World(); 
+			System.out.println("mainloop: cellpause");
+			 Game.gens = 2; //forcing 1 generation for cell-choice option
+             Window.random = true;
+             endTimer = false;
+		} 
+		 
+		 public static void cellChoose() {
+	            Scanner kb = new Scanner (System.in);
+           
+                 System.out.println("would you like to change any of the cells?");
+                 System.out.println("type yes, or no");
+                 cellChange = kb.nextLine().toLowerCase();
+                 
+                 if (cellChange.equals("yes")) {
+              	   System.out.println("which column?");
+                     chooseCol = kb.nextInt();
+                     System.out.println("column: " + chooseCol);
 
+                     System.out.println("which row?");
+                     chooseRow = kb.nextInt();
+                     System.out.println("row: " + chooseRow);
+                     
+        	    	  World world2 = new World();
+        	    	  world2.cellChange();
 
-			 System.out.println("new world - start mainloop");
-
-	        
-	    		if (Window.random = false) {
-	    		System.out.println("mainloop random = false - mainloop");	
-	    		}
-	    		else if (Window.random = true) {
-	    		}
-	    		else {
-		    		System.out.println("mainloop random = false - mainloop");	
-	    		}
-	          
-	    	}
-	    
-	    public void timerStop() {
-	         while (endTimer = true) {
-	        	 System.out.println("game has ended");
-	        	 this.timer.stop();
-	        	 break;
+                     chosenCell = true;
+                     
+                     System.out.println("game initiating : cellChoose : mainloop");
+                     Window.unPause();
+                     
+           
+                 } 
+                 else if (cellChange.equals("no")) { 
+     				System.out.println("continuing with default grid..");
+     				Window.unPause();
+     				chosenCell = false;
+                 }
+                 else {
+        				System.out.println("please enter either yes/no");
+                  }
+               } 			 
+		
+	    public void timerBegin() {
+	        	 System.out.println("game has begun");
+	        	 this.timer.start();
 	         }
-		  } 	
+		  	
 	
 	    public void start(){
-	 	     this.timer.start(); //timer begins
-
+	    
 	    	System.out.println("start - mainloop");
-	    	 random = false;
              Window.random = true;
-	    	
 	         maxRev = false;
              endTimer = false;
-	 	     this.timer.start(); //timer begins
-		    	System.out.println(world.revolutions + " revolutions starting");
-
-		   	
-	         while (gameStarted = false) {	   
-	            Scanner kb = new Scanner (System.in);
-	            	String endCmd = kb.nextLine();
-	            	
-	            	if (endCmd.equals("quit") || endCmd.equals("q")) {
-	            		System.out.println("exit inputted, quitting..");
-	            		Window.dispose();
-	            		gameStarted = false;
-	            		break;
-	            	}
-	            	else if (endCmd.equals("rate")) {
-	            		System.out.println("Change cell rate to..?");
-	            		Refer.newRate = kb.nextInt();
-	            		Game.refresh = newRate+Refer.newRate;
-	            		System.out.println("The new refresh rate is: " + Refer.newRate + ", " + Game.refresh);
-	
-	            		gameStarted = true;	
-	            	}
-	            	else {
-	            		System.out.println("error, quitting game");
-	            		Window.dispose();
-	            		gameStarted = false;
-	            		break;
-	            	}
-	            	
+	         System.out.println(world.revolutions + " revolutions starting - mainloop start");
 	         }
-	       }
+	    
 	    public static void gameRestart () {
 	    	if (Window.continueGame = true) {
             Scanner kb = new Scanner (System.in);
-            	Game.gens = 0;
 				System.out.println("How many more generations?");
-				Game.gens =kb.nextInt();
-				System.out.println("continuing with " + Game.gens + " more generations..");
-	
+				Game.gens = kb.nextInt();
+				System.out.println("continuing with " + Game.gens + " generations..");
+				mainLoop = false;
+				Window.random = false;
 				new MainLoop().continueStart(); System.out.println("started loop - mainloop");
-				Window.continueGame = false; //ending loop
+				Window.continueGame = true; //ending loop
 				gameStarted = true;
 				Window.random = false;
 			}
@@ -119,49 +125,44 @@
 	    
 	    public void continueStart() {
 	    	System.out.println("continueStart - mainloop");
-	    	
 	         maxRev = false;
              endTimer = false;
 
-		    	System.out.println(world.revolutions + " revolutions begin - mainloop");
+		    	//.out.println(world.revolutions + " revolutions begin - mainloop");
 	    	
 	    }
 	    
 	    public static void gameInitiate () {
-            Scanner kb = new Scanner (System.in);
-            newRate = Game.refresh_rate;
-
-			 System.out.println("choose a new cell refresh-rate ");
-               int rate = kb.nextInt();
-
-               if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
-            	   Game.refresh = rate;
-                   Refer.newRate = Game.refresh;
-                   System.out.println("Your new refresh rate is: " + rate);
-                		   
-                   System.out.println(Refer.newRate);
+	    		    
 	    	if (Window.continueGame = true) {
+	            Scanner kb = new Scanner (System.in);
 				Game.gens = 0; //reset total generations
+					System.out.println(Game.gens + " game gens - gameInitiate,");
 
 				System.out.println("How many generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
 	                Game.gens = kb.nextInt();   
 	                
-	                
-	 				System.out.println("continuing with " + Game.gens + " more generations..");
-					new MainLoop().initiateStart(); 
+	 				System.out.println("continuing with " + Game.gens + " generations..");
 					//Window.create(); System.out.println("window create - gameinitiate");
 					Window.continueGame = false; //ending loop
 					gameStarted = true;
 					Window.random = false;
-	    		}
+					new MainLoop().initiateStart(); 
+
 	    	}
 	    }
 	    	public void initiateStart() { //for starting a new game from option "new"
-		    	System.out.println("initiateStart - mainloop");
-		    	
+		    	System.out.println("initiateStart");
+		    	this.timer.stop();
 		         maxRev = false;
-	             endTimer = false;
+	             endTimer = true;
 	             System.out.println(world.revolutions + " revolutions begin - mainloop");
+	             new MainLoop().timerBegin();
+
+	    	}
+	    	public void timerStart () {
+	    		this.timer.start();
+	    		System.out.println("re-initate timer - timerStart");
 	    	}
 	
 	    
