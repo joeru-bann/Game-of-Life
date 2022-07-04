@@ -9,13 +9,13 @@ import java.awt.Color;
 
 public enum Cell {
     
-    DEAD(Color.BLACK),
-    ALIVE(Color.GREEN);
+    DEAD(Color.black),
+    ALIVE(Color.red);
     
     private Color color;
     
     Cell(Color color) {
-        this.color = color;
+        this.color = color;	
     }
     
     public Color getColor() {
