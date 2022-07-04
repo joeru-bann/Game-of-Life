@@ -1,8 +1,12 @@
 	package gol;
 	import javax.swing.JFrame;
-	import javax.swing.Timer;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 	import java.awt.event.ActionListener;
-	import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 	import java.util.Scanner;
 	import java.io.IOException;
 	
@@ -30,6 +34,9 @@
 	    static int chooseCol;
 	    static String cellChange;
 	    static boolean mainLoop;
+	    JPanel textPanel;
+	    JLabel textLabel;
+	    Font normalFont = new Font("Times New Roman", Font.PLAIN, 28);
 	    
 	    
 	    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
@@ -63,6 +70,8 @@
                  System.out.println("type yes, or no");
                  cellChange = kb.nextLine().toLowerCase();
                  
+                 
+                 
                  if (cellChange.equals("yes")) {
               	   System.out.println("which column?");
                      chooseCol = kb.nextInt();
@@ -78,19 +87,38 @@
                      chosenCell = true;
                      
                      System.out.println("game initiating : cellChoose : mainloop");
-                     Window.unPause();
-                     
-           
+               
+               		
+                    Window.unPause();
+
                  } 
                  else if (cellChange.equals("no")) { 
      				System.out.println("continuing with default grid..");
-     				Window.unPause();
      				chosenCell = false;
+
+     				Window.unPause();
                  }
                  else {
         				System.out.println("please enter either yes/no");
                   }
-               } 			 
+               } 		
+		 
+		 public void cellColourChoice() {
+			 
+			 textPanel = new JPanel();
+             textPanel.setBounds(100, 300, 600, 250);
+             textPanel.setBackground(Color.black);
+            
+            
+            textLabel = new JLabel("Pick an alive-cell colour");
+            textLabel.setBackground(Color.black);
+            textLabel.setForeground(Color.white);
+            textLabel.setFont(normalFont);
+            textPanel.add(textLabel);
+            
+             window.add(textPanel);
+             window.setVisible(true);
+		 }
 		
 	    public void timerBegin() {
 	        	 System.out.println("game has begun");
@@ -110,7 +138,7 @@
 	    public static void gameRestart () {
 	    	if (Window.continueGame = true) {
             Scanner kb = new Scanner (System.in);
-				System.out.println("How many more generations?");
+				System.out.println("How many generations?");
 				Game.gens = kb.nextInt();
 				System.out.println("continuing with " + Game.gens + " generations..");
 				mainLoop = false;
@@ -127,8 +155,7 @@
 	    	System.out.println("continueStart - mainloop");
 	         maxRev = false;
              endTimer = false;
-
-		    	//.out.println(world.revolutions + " revolutions begin - mainloop");
+             //System.out.println(world.revolutions + " revolutions begin - mainloop");
 	    	
 	    }
 	    
