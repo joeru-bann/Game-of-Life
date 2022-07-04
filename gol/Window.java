@@ -1,9 +1,12 @@
 package gol;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Window {
@@ -15,6 +18,8 @@ public class Window {
     static boolean newGame = false;
     static boolean continueGame = false;
     static boolean random = false;
+    JPanel textPanel;
+    JLabel textLabel;
 
     
     public static void sleep(int time) { // function to help reading process be smoother experience by pausing
@@ -25,6 +30,7 @@ public class Window {
 
     public static void create() {
         window = new JFrame("Joel's Game of Life");
+        window.setSize(800,600);
         window.setBounds(10, 10, 0, 0);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -38,6 +44,15 @@ public class Window {
         window.setVisible(true);
         
     }
+    //public Window() {
+       // textPanel = new JPanel();
+        //textPanel.setBounds(100, 300, 600, 250);
+       // textPanel.setBackground(Color.black);
+        
+        //window.add(textPanel);
+        //window.setVisible(true);
+   // }
+    
 
     public static void updateBoard(World renderWorld) {
         board.update(renderWorld);
@@ -51,22 +66,27 @@ public class Window {
 	
 
 	public static void pause (){ //pausing game when generations have completed
+		 if (Game.gens == 2){
+				System.out.println("game gens = 2 : Window");
+				MainLoop.chosenCell = false;
+				  MainLoop.cellChoose();
+			}
 		
+		 else {
+	
+		Scanner kb = new Scanner (System.in);
 		if (World.maxRev = true && Game.gens != 2){
 			Game.gens = World.finalRevs;
 			System.out.println("All " + Game.gens + " generations, have completed. \n");
 	 		System.out.println("new game? type new, exit game: type end/q, or c/continue) \n");
-	 		choice = kb.nextLine().toLowerCase();
-	 		
-		}
-		else if (Game.gens == 2){
-			System.out.println("game gens = 2 : Window");
-			MainLoop.chosenCell = false;
-			  MainLoop.cellChoose();
-		}
-				
-		while(World.maxRev = false) {
+			choice = kb.nextLine().toLowerCase();
 			
+
+	 	
+		}
+		
+				
+
          		if (choice.equals("new")) {
     				Game.gens = 0; //reset total generations
                     System.out.println("creating new game...");
@@ -75,12 +95,12 @@ public class Window {
          			Window.newGame();
         	 		System.out.println("if you want to change the cell-rate, type rate \n");
 
-     				MainLoop.random = true;
+     				random = true;
          			MainLoop.gameStarted = false;
      				continueGame = true;
-         			break;
+         			
          		}
-         			else if (choice.equals("end") || (choice.equals("q"))) {
+         			 if (choice.equals("end") || (choice.equals("q"))) {
              			System.out.print("quitting in: ");
              				System.out.print("3, ");
              				sleep(600);
@@ -104,15 +124,15 @@ public class Window {
          			}	
          			else if (choice.equals("rate")) {
     	            		System.out.println("Change cell rate to..?");
-    	            		Game.refresh = kb.nextInt();
-    	            		System.out.println("The new refresh rate is: " + Refer.newRate + ", " + Game.refresh);
+    	            		Game.refresh_rate = kb.nextInt();
+    	            		System.out.println("The new refresh rate is: " + Refer.newRate + ", " + Game.rate);
          			}
          			else {
          				System.out.println("error: please choice an option from above");
-             			break;
          			}
+		}
  	   }
-	}
+	
 	public static void unPause () {
 		System.out.println("unpause");
 			World.maxRev = false;
