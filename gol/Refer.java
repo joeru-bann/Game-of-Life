@@ -1,137 +1,21 @@
-package gol;
-import gol.utils.MathHelper;
-import java.awt.Graphics;
-import gol.World;
+    package gol;
 /**
- * Fundamental rules for grid checking location + neighbours
- * Joel Bannister
- * 16.05.22
+ * definitions for world
+ *
+ * @Joel Bannister
+ * 25/05
  */
+    
+public class Refer {
 
-public class World 
-{
-	int revolutions;
-    boolean update;
-    static int finalRevs;;
-    int x;
-    int y;
-    static boolean maxRev = false;
+    public static final int world_width = 5000;
+    public static final int world_height = 3000;
+    
+    public static final int customWorld_width =  Game.cols;
+    public static final int customWorld_height = Game.rows;
+    
+    public static final int cell_size = 10; //cell size compared to grid  
 
-    private Cell[][] grid;
-
-    public void draw(Graphics graphics){
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[i].length;j++){
-                graphics.setColor(grid[i][j].getColor()); //colouring the cells
-                graphics.fillRect(i * Refer.cell_size, j * Refer.cell_size, Refer.cell_size, Refer.cell_size);
-            }
-        }
-    }
-
-    public World()  {
-    	if (Window.random = true) {
-    		revolutions = 0;
-    		System.out.println("window random true : world");
-        this.grid = new Cell[Game.cols][Game.rows];
-        for (int i=0;i<grid.length;i++){
-            for (int j=0;j<grid[i].length;j++){
-                this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD; 
-              }//makes a random grid of either alive, or dead cells
-            }
-        
-        }
-    }
-
-    public void update() {
-        int countAlive;
-        
-        Cell[][] worldCopy = new Cell[Game.cols][Game.rows];
-
-        for (int i=0;i<grid.length;i++){
-            for (int j=0;j<grid[i].length;j++){
-
-                countAlive = this.getNeighborCells(i, j);
-                //rules for deciding whether or not cell lives or dies (based off original rules)
-
-                if(grid[i][j]== Cell.ALIVE) {
-
-                    if(countAlive > 3)
-                        worldCopy[i][j] = Cell.DEAD;
-                    else if (countAlive < 2)
-                        worldCopy[i][j] = Cell.DEAD;
-                    else
-                        worldCopy[i][j] = Cell.ALIVE;
-                }
-                else {
-                    if(countAlive == 3)
-                        worldCopy[i][j] = Cell.ALIVE;
-                    else
-                        worldCopy[i][j] = Cell.DEAD;
-                }
-            }
-        }
-        this.grid = worldCopy;
-        ++revolutions;
-        
-        if (Game.gens != 2) { //to not print out first pause generations 
-	    System.out.println("total revolutions: " + revolutions);
-        }
-        
-	    if (revolutions >= Game.gens) { //stopping game when loop reaches specified amount of generations
-	    	finalRevs = Game.gens;
-	    	
-	        Window.random = false;
-	    	revolutions = finalRevs; 
-	    	maxRev = true;
-	    	MainLoop.endTimer = true;
-	    	MainLoop.gameStarted = false;
-    		Window.pause();
-    		revolutions = 0;
-    		System.out.println(" \n");
-        	 } 
-
-	    else if (revolutions <= Game.gens) {
-	    	maxRev = false;
-	    }
-
+    
+    public static int newRate = Game.refresh_rate;
 }
-    private int getNeighborCells(int x, int y) {    //counting amount of alive cell neighbours
-
-        int countAlive = 0; 
-        for (int i = x - 1; i <= x + 1; i++) {
-            for (int j = y - 1; j <= y + 1; j++) {
-                try{
-                    if (grid [i][j] == Cell.ALIVE)
-                        countAlive ++;
-                } catch(ArrayIndexOutOfBoundsException e){
-                    continue; //in case it counts anything out of bounds
-                }
-
-            } 
-        }
-        //subtract 1 to account for the cell itself (doesn't count as a neighbour)
-        if(grid[x][y] == Cell.ALIVE) {
-            return countAlive - 1;}
-        else {
-            return countAlive;
-    }
- 
-   }
-		public void cellChange() {	
-			int Col = MainLoop.chooseCol;
-			int Row = MainLoop.chooseRow;
-			
-				System.out.println("chosen cell true : World : cellChange");
-				if(grid[Col][Row] == Cell.ALIVE) {
-					(grid[Col][Row]) = Cell.DEAD;
-				}	
-				else if (grid[Col][Row] == Cell.DEAD) {
-					System.out.println("grid x,y = celldead : World : cellChange");
-					(grid[Col][Row]) = Cell.ALIVE;
-				}
-				System.out.println();
-
-				 
-			}
-		}
-
