@@ -12,7 +12,10 @@ import java.util.InputMismatchException;
 
 public class Game
 {
-    public static int gens = 0;
+    public static int refresh_rate;
+    public static final int rate = refresh_rate;
+
+	public static int gens = 0;
     public static int rows = 0;
     public static int cols = 0;
     //reading input from the user
@@ -27,8 +30,7 @@ public class Game
     boolean fileBoard;
     int choice = 0;
     static String num;
-    static int refresh_rate;
-    public static int refresh = Refer.newRate;
+    //public static int rate;
     boolean cellSelect = false;
 
     //variables begin/set up gamne
@@ -112,16 +114,18 @@ public class Game
             System.out.println("choose a cell refresh-rate from (10-1000), e.g : 10 is extremely fast, 1000 is really slow");
 
             while (!rateChosen) {
+            	
                 int rate = keyin.nextInt();
-
+               refresh_rate = rate;
+                
                 if (rate>=10 && rate<=1000) { //keeping the rate within reasonable limits
-                    System.out.println("Your refresh rate is: " + rate
+                    System.out.println("Your refresh rate is: " + Refer.newRate
                         + "\n You can change this by typing rate \n");
-                    refresh = rate;
+                    
                     sleep(300); 
 
-                    cols = 1000; //setting default window size
-                    rows = 760;   
+                    cols = 300; //setting default window size
+                    rows = 170;   
 
                     rateChosen = true;  
                     random = true;
@@ -130,13 +134,13 @@ public class Game
                     gens = 1;
                     Window.create();//creates new board
                     new MainLoop().cellPause(); // if the rate is within limits, start game
+                    break;
 
                 } 
                 else {
                     System.out.println("please choose a valid number");
                     cellSelect = false;
                 }             
-                break;
             }
 
             case 5: //if using pre-made file 
