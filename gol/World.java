@@ -31,6 +31,7 @@ public class World
     public World()  {
     	if (Window.random = true) {
     		revolutions = 0;
+    		System.out.println("window random true : world");
         this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
@@ -128,7 +129,6 @@ public class World
 					System.out.println("grid x,y = celldead : World : cellChange");
 					(grid[Col][Row]) = Cell.ALIVE;
 				}
-				System.out.println("starting edited game");
 				System.out.println();
 
 				 
