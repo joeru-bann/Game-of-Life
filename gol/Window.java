@@ -1,13 +1,10 @@
 package gol;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Scanner;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class Window {
 
@@ -18,8 +15,6 @@ public class Window {
     static boolean newGame = false;
     static boolean continueGame = false;
     static boolean random = false;
-    JPanel textPanel;
-    JLabel textLabel;
 
     
     public static void sleep(int time) { // function to help reading process be smoother experience by pausing
@@ -36,23 +31,16 @@ public class Window {
         window.setResizable(false);
 
         board = new Board(); System.out.println("created board - window:create");
-        board.setPreferredSize(new Dimension(Game.cols * Refer.cell_size, Game.rows * Refer.cell_size)); 
+        board.setPreferredSize(new Dimension(Game.cols , Game.rows)); 
+
+       // board.setPreferredSize(new Dimension(Game.cols * Refer.cell_size, Game.rows * Refer.cell_size)); 
         //multiplying dimensions together, result in proportionalality
         board.setFocusable(true);
-        window.setContentPane(board); // makes board the child component
+        window.setContentPane(board); 
         window.pack(); //window fits size of subcompenents
         window.setVisible(true);
         
     }
-    //public Window() {
-       // textPanel = new JPanel();
-        //textPanel.setBounds(100, 300, 600, 250);
-       // textPanel.setBackground(Color.black);
-        
-        //window.add(textPanel);
-        //window.setVisible(true);
-   // }
-    
 
     public static void updateBoard(World renderWorld) {
         board.update(renderWorld);
@@ -76,28 +64,16 @@ public class Window {
 	
 		Scanner kb = new Scanner (System.in);
 		if (World.maxRev = true && Game.gens != 2){
-			Game.gens = World.finalRevs;
+			Game.gens = World.finalRevs; 
 			System.out.println("All " + Game.gens + " generations, have completed. \n");
 	 		System.out.println("new game? type new, exit game: type end/q, or c/continue) \n");
-			choice = kb.nextLine().toLowerCase();
-			
-
-	 	
+			choice = kb.nextLine().toLowerCase();	 	
 		}
-		
-				
-
          		if (choice.equals("new")) {
     				Game.gens = 0; //reset total generations
                     System.out.println("creating new game...");
-         			//window.dispose();
                     sleep(1500);
          			Window.newGame();
-        	 		System.out.println("if you want to change the cell-rate, type rate \n");
-
-     				random = true;
-         			MainLoop.gameStarted = false;
-     				continueGame = true;
          			
          		}
          			 if (choice.equals("end") || (choice.equals("q"))) {
@@ -115,12 +91,7 @@ public class Window {
  	            		MainLoop.endTimer = true;
          			}
          			else if (choice.equals("c") || (choice.equals("continue"))) {
-         		    	MainLoop.endTimer = true;
-         				continueGame = true;
          				Window.unPause();
-         				random = false;
-         				MainLoop.random = false;
-
          			}	
          			else if (choice.equals("rate")) {
     	            		System.out.println("Change cell rate to..?");
@@ -129,17 +100,18 @@ public class Window {
          			}
          			else {
          				System.out.println("error: please choice an option from above");
+         				
          			}
-		}
+		    }
  	   }
 	
-	public static void unPause () {
+	public static void unPause () { //continuing with the game
 		System.out.println("unpause");
 			World.maxRev = false;
 			MainLoop.gameRestart();
 			
 		}
-	public static void newGame () {
+	public static void newGame () { //starting new game
 		System.out.println("newGame - window");
 			World.maxRev = false;
 			MainLoop.gameInitiate();
