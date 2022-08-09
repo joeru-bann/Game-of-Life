@@ -1,5 +1,7 @@
 package gol;
 import gol.utils.MathHelper;
+
+import java.awt.Color;
 import java.awt.Graphics;
 import gol.World;
 /**
@@ -10,7 +12,7 @@ import gol.World;
 
 public class World 
 {
-	int revolutions;
+	int generations;
     boolean update;
     static int finalRevs;;
     int x;
@@ -28,15 +30,15 @@ public class World
         }
     }
 
-    public World()  {
+    public World()  {  //makes a random grid of either alive, or dead cells
     	if (Window.random = true) {
-    		revolutions = 0;
+    		generations = 0;
     		System.out.println("window random true : world");
         this.grid = new Cell[Game.cols][Game.rows];
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
                 this.grid[i][j] = MathHelper.randomBoolean() ? Cell.ALIVE : Cell.DEAD; 
-              }//makes a random grid of either alive, or dead cells
+              }
             }
         
         }
@@ -44,14 +46,14 @@ public class World
 
     public void update() {
         int countAlive;
-        
+
         Cell[][] worldCopy = new Cell[Game.cols][Game.rows];
 
         for (int i=0;i<grid.length;i++){
             for (int j=0;j<grid[i].length;j++){
 
                 countAlive = this.getNeighborCells(i, j);
-                //rules for deciding whether or not cell lives or dies (based off original rules)
+                //rules for deciding whether or not cell lives or dies (based off original conway gol rules)
 
                 if(grid[i][j]== Cell.ALIVE) {
 
@@ -71,26 +73,23 @@ public class World
             }
         }
         this.grid = worldCopy;
-        ++revolutions;
+        ++generations;
         
         if (Game.gens != 2) { //to not print out first pause generations 
-	    System.out.println("total revolutions: " + revolutions);
+        	
+        System.out.print('\u000C');
+	    System.out.println("generations: " + generations);
+	   
         }
         
-	    if (revolutions >= Game.gens) { //stopping game when loop reaches specified amount of generations
+	    if (generations >= Game.gens) { //stopping game when loop reaches specified amount of generations
 	    	finalRevs = Game.gens;
-	    	
-	        Window.random = false;
-	    	revolutions = finalRevs; 
-	    	maxRev = true;
-	    	MainLoop.endTimer = true;
-	    	MainLoop.gameStarted = false;
     		Window.pause();
-    		revolutions = 0;
+    		generations = 0;
     		System.out.println(" \n");
         	 } 
 
-	    else if (revolutions <= Game.gens) {
+	    else if (generations <= Game.gens) {
 	    	maxRev = false;
 	    }
 
@@ -117,21 +116,25 @@ public class World
     }
  
    }
-		public void cellChange() {	
-			int Col = MainLoop.chooseCol;
-			int Row = MainLoop.chooseRow;
+		public void cellChange() {	 //changing the state of a specific alive/dead cell 
+//			int Col = MainLoop.chooseCol;
+//			int Row = MainLoop.chooseRow;
 			
-				System.out.println("chosen cell true : World : cellChange");
+			int Col = 1;
+			int Row = 1;
+			
 				if(grid[Col][Row] == Cell.ALIVE) {
 					(grid[Col][Row]) = Cell.DEAD;
+					System.out.println("cell change from alive to dead");
 				}	
 				else if (grid[Col][Row] == Cell.DEAD) {
-					System.out.println("grid x,y = celldead : World : cellChange");
 					(grid[Col][Row]) = Cell.ALIVE;
+
+					
+					System.out.println("cell change from dead to alive");
+
 				}
 				System.out.println();
-
 				 
 			}
-		}
-
+}
