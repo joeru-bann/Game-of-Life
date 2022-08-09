@@ -47,17 +47,18 @@ import java.awt.event.ActionEvent;
 	      
 	    public MainLoop(){
 	    	
- 	        // this.timer = new Timer(Refer.newRate, this);
-			// this.world = new World();  System.out.println("new world - mainloop");
-			// this.timer.start();
+ 	         this.timer = new Timer(Refer.newRate, this);
+			 this.world = new World();  System.out.println("new world - mainloop");
+
+			 //this.timer.start();
 	    }
 	    
 		 public void cellPause() { //to pause for cell selection
+				System.out.println("mainloop: cellpause");
 	 	        this.timer = new Timer(Refer.newRate, this);
-	 	        this.world = new World();  System.out.println("new world - mainloop");
+	 	        //this.world = new World();  System.out.println("new world 2 - mainloop");
 				this.timer.start();
 
-			System.out.println("mainloop: cellpause");
 			 Game.gens = 2; //forcing 1 generation for cell-choice option
              Window.random = true;
              endTimer = false;
@@ -127,12 +128,12 @@ import java.awt.event.ActionEvent;
 		  	
 	
 	    public void start(){
-	    
+
 	    	System.out.println("start - mainloop");
              Window.random = true;
 	         maxRev = false;
              endTimer = false;
-	         System.out.println(world.revolutions + " revolutions starting - mainloop start");
+	         System.out.println(world.generations + " revolutions starting - mainloop start");
 	         }
 	    
 	    public static void gameRestart () {
@@ -143,10 +144,10 @@ import java.awt.event.ActionEvent;
 				System.out.println("continuing with " + Game.gens + " generations..");
 				mainLoop = false;
 				Window.random = false;
+
 				new MainLoop().continueStart(); System.out.println("started loop - mainloop");
-				Window.continueGame = true; //ending loop
+				Window.continueGame = false;
 				gameStarted = true;
-				Window.random = false;
 			}
 		}
 	    
@@ -155,7 +156,7 @@ import java.awt.event.ActionEvent;
 	    	System.out.println("continueStart - mainloop");
 	         maxRev = false;
              endTimer = false;
-             //System.out.println(world.revolutions + " revolutions begin - mainloop");
+             System.out.println(world.generations + " revolutions begin - mainloop");
 	    	
 	    }
 	    
@@ -164,32 +165,17 @@ import java.awt.event.ActionEvent;
 	    	if (Window.continueGame = true) {
 	            Scanner kb = new Scanner (System.in);
 				Game.gens = 0; //reset total generations
-					System.out.println(Game.gens + " game gens - gameInitiate,");
 
 				System.out.println("How many generations? (do smaller amounts e.g 10-80 for refresh-rates over 300");
 	                Game.gens = kb.nextInt();   
 	                
 	 				System.out.println("continuing with " + Game.gens + " generations..");
-					//Window.create(); System.out.println("window create - gameinitiate");
-					Window.continueGame = false; //ending loop
-					gameStarted = true;
-					Window.random = false;
-					new MainLoop().initiateStart(); 
-
+					new MainLoop().timerStart(); 
 	    	}
 	    }
-	    	public void initiateStart() { //for starting a new game from option "new"
-		    	System.out.println("initiateStart");
-		    	this.timer.stop();
-		         maxRev = false;
-	             endTimer = true;
-	             System.out.println(world.revolutions + " revolutions begin - mainloop");
-	             new MainLoop().timerBegin();
-
-	    	}
 	    	public void timerStart () {
+	    		System.out.println("timerStart");
 	    		this.timer.start();
-	    		System.out.println("re-initate timer - timerStart");
 	    	}
 	
 	    
