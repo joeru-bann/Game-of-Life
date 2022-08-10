@@ -33,8 +33,8 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
                        
 	private static final long serialVersionUID = 1L;
 	//dimensions of the panel:
-	int xPanel = 1300;
-	int yPanel = 700;
+	int xPanel = 800;
+	int yPanel = 800;
 	
 	int size = 7; //size of each "cell"/square
 
@@ -49,6 +49,10 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 
 	
 	boolean starts = true; //at the start of the program, all equals true
+	
+	boolean paused = false;
+
+	boolean begun = false; //indicated wheteher "B" key has been pressed to begin game
 
 	
 	int initial = -1; //indicates if the mouse is clicked
@@ -97,7 +101,7 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		    //adding frame rate (essentially the game speed):
 		inputTime(input);
 		if(timeInput == 0 || timeInput <= 0) {
-			System.out.println("entered value is below/equal to 0, setting as default: 80ms");
+			System.out.println("entered value is below/equal to 0, setting as default: 80");
 			time = new Timer(80, this);    //default
 		}else if(timeInput >= 0){
 			time = new Timer(timeInput, this);
@@ -113,8 +117,27 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		this.timeInput = timeInput;
 	}
 	
-
+	public static void timedPrint(String output) { //for aesthetics, allows player to read line by line easily instead of all at once
+        for (int i = 0; i<output.length(); i++) {
+        	char c = output.charAt(i);
+            System.out.print(c);
+            try {
+                TimeUnit.MILLISECONDS.sleep(10);
+              }
+              catch (Exception e) {}
+        }
+    }
 	
+	public static void sleep(int time) { // function to help reading process be smoother experience by pausing
+        try {
+            Thread.sleep(time);
+        } catch (Exception e) {}
+    }
+	
+	public static void clearScreen() {   //flushing terminal (clearing)
+	    System.out.print("\u000c");  
+	    System.out.flush();  
+	}  
 
 
 	//calling the creation methods for the elements
@@ -297,10 +320,35 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
     }	
 	
 	public void inputTime(Scanner input) { //getting the speed of the game from user
-		System.out.print("Enter game speed time in ms (miliseconds):  ");
+		System.out.print("Enter game speed time in miliseconds:  "); 	System.out.println("(20 - 700 - recommended range) \n");
+
 		this.setTimeInput(input.nextInt());
+		
+		clearScreen();
+		timedPrint("Press \"R\" for random, then \"B\" for begin, \"L\" to load progress \n");
+		
+		clearScreen();
+		timedPrint("press \"q\" at any time to quit the game \n");
+
 		input.close();
 	}
+	public void chooseColour(String color) {
+		
+		System.out.println("Choose a colour for alive-cells? type y/n");
+		String change = input.nextLine();
+		String colour;
+
+		
+		if (change.equals("y")) {
+			
+			System.out.println("type a colour for the alive ");
+			 colour = input.nextLine();
+		}
+		
+		else if (change.equals("n")) {
+			 colour = "GREEN";
+		}
+}
 	
 	
     void takePicture(golPanel panel) {
@@ -323,7 +371,7 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 	//methods for the mouse:
 	//detects the actions the mouse performs: dragging, holding, clicking etc.
 	public void mouseDragged(MouseEvent e) {
-		//here we make this so we can click on a cell and if it is on, we turn it off and vice versa
+		//we can click on a cell and if it is on, turn it off and vice versa
 		int x = e.getX()/size;
 		int y = e.getY()/size;
 		
@@ -331,7 +379,7 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		if(life[x][y] == 0  &&  initial == 0) {
 			beforeLife[x][y] = 1;
 		}
-		else if (life[x][y] == 1  &&  initial == 1) {
+		else if (life[x][y] == 1  &&  initial == -1) {
 			beforeLife[x][y] = 0;
 		}
 		repaint(); 		//to refresh it:
@@ -354,21 +402,36 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		initial = -1;
 	}
 	
-	public void mouseEntered(MouseEvent e) { }
+	public void mouseEntered(MouseEvent e) {
+		if(begun == true && paused == false) {
+			time.start();
+		}
+		else {}
+	}
 	
-	public void mouseExited(MouseEvent e) { }
+	public void mouseExited(MouseEvent e) { 
+		time.stop();
+	}
 	
 	//movement of the mouse
 	public void  mouseMoved(MouseEvent e) { }
 	
 	//MouseListener methods:
-	public void mouseClicked(MouseEvent e) { }
+	public void mouseClicked(MouseEvent e) {  //same as drag, but clicking individual cells for accuracy
+		int x = e.getX()/size;
+		int y = e.getY()/size;
+		
+		if(life[x][y] == 0  &&  initial == 0) {
+			beforeLife[x][y] = 1;
+		}
+		else if (life[x][y] == 1  &&  initial == -1) {
+			beforeLife[x][y] = 0;
+		}
+		repaint();
+	}
 
 	
 	
-	
-	
-
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -379,7 +442,7 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		if(code == KeyEvent.VK_R) {
 			//we will call the method for making the squares:
 			spawn();
-			time.start();
+			System.out.println("Press \"B\" to begin");
 		}
 		//"C" for clear
 		else if(code == KeyEvent.VK_C) {
@@ -389,33 +452,48 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		//"B" for begin -> start of the timer
 		else if(code == KeyEvent.VK_B) {
 			time.start();
+			begun = true;
 		}
-		//"A" for abandon -> timer will stop
-		else if(code == KeyEvent.VK_A) {
+		else if(code == KeyEvent.VK_A) {	//"A" for abandon -> timer will stop
+			clear();
 			time.stop();
+			System.out.println("aborted");
+			saveProgress();
 		}
-		//"S" for save progress
-		else if(code == KeyEvent.VK_S) {
+		else if(code == KeyEvent.VK_S) { 	//"S" for save progress
+
 			System.out.println(filename.length());
 			if(filename.length() == 0) {
 				saveProgress();
 			}else {
-			    filename.delete();
+				System.out.println("else save");
+				filename.delete();
 				saveProgress();
 			}	
 		}
-		// "I" for pause
-		else if (code == KeyEvent.VK_I) {
-			time.stop();	
+		else if(code == KeyEvent.VK_L) { // "L" for load progress
+			getProgress();
+			System.out.println("loaded previous save");
+		}
+		// "P" for pause
+		else if (code == KeyEvent.VK_P || code == KeyEvent.VK_SPACE) {
+			
+			if(paused == true) {
+				time.start();
+				paused = false;
+			}
+			else {
+				time.stop();
+				paused = true;
+			}
 		}
 		//"O" for continue
-		else if (code == KeyEvent.VK_O) {
-			getProgress();
+		else if (code == KeyEvent.VK_O  && begun == true) {
 			time.start();
 
 		}
-		// "P" for Picture
-		else if (code == KeyEvent.VK_P) {
+		// "I" for Picture
+		else if (code == KeyEvent.VK_I) {
 			takePicture(this);
 
 		}
@@ -423,6 +501,25 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 		else if (code == KeyEvent.VK_T) {
 			inputTime(input);
 		}
+		
+		else if (code == KeyEvent.VK_UP) { //speed decrease
+			timeInput++;
+			setTimeInput(timeInput);
+			System.out.println("speed: " + time);
+		}
+		else if (code == KeyEvent.VK_DOWN) { //speed increase
+			
+			timeInput--;
+			setTimeInput(timeInput);
+			System.out.println("speed: " + timeInput);
+
+		}
+		else if (code == KeyEvent.VK_Q) {
+			System.out.println("quitting");
+			sleep(150);
+			System.exit(0);
+		}
+		
 
 		repaint();
 	}
@@ -432,6 +529,4 @@ public class golPanel extends JPanel implements ActionListener, MouseListener, M
 
 	@Override
 	public void keyTyped(KeyEvent e) { }
-
-
 }
