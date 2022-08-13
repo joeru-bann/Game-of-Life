@@ -18,7 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-//adding input from the keyboard
+//adding input from the keyBoard
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 //saving and getting progress
@@ -42,10 +42,9 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
     int yHeight = yPanel/size;
     
-	int[][] life = new int[xWidth][yHeight]; 	    
+	int[][] Board = new int[xWidth][yHeight]; 	    
 	
-	
-	int[][] beforeLife = new int[xWidth][yHeight]; 	//adding another array and set it equal to 1 later in a method
+	int[][] beforeBoard = new int[xWidth][yHeight]; 	//adding another array and set it equal to 1 later in a method
 
 	
 	boolean starts = true; //at the start of the program, all equals true
@@ -60,7 +59,10 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	
 	boolean gensComplete; 
 	
-	boolean cellsPlaced = false; //to determine whether there are cells for the game to start with
+	boolean cellsDrawn = false; //to determine whether there are cells for the game to start with
+	
+	int aliveCells = 0;
+
 
 	
 	int initial = -1; //indicates if the mouse is clicked
@@ -86,7 +88,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		reader = new BufferedReader(fileReader);
 		sc = new Scanner(fileReader);
 
-	}catch (FileNotFoundException e) {}
+	}	catch (FileNotFoundException e) {}
 	catch(IOException e){ }
 	}   
 		
@@ -103,18 +105,16 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		addKeyListener(this);
 		setFocusable(true);
 		
-	    	//setting the background color:
 		setBackground(Color.BLACK);
 		
-		    //adding frame rate (essentially the game speed):
-		inputTime(input);
+		inputTime(input);	//adding game speed):
+
 		if(timeInput == 0 || timeInput <= 0) {
 			System.out.println("entered value is below/equal to 0, setting as default: 80");
 			time = new Timer(80, this);    //default
 		}else if(timeInput >= 0){
 			time = new Timer(timeInput, this);
-		}
-		
+		}	
 	}
 
 
@@ -165,30 +165,36 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	//creating a grid with lines (gray for ease on eyes)
 	private void grid(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
-		for(int i=0; i<life.length; i++) { //drawing the grid lines
+		for(int i=0; i<Board.length; i++) { //drawing the grid lines
 			g.drawLine(0, i*size, xPanel, i*size);  //row
 			g.drawLine(i*size, 0, i*size, yPanel);  //columns
 		}
 	}
 	
 	
-	
-	
-		private void spawn() {
-			// choosing random squares to be on/alive
-			for (int x=0; x<life.length; x++) {
+		private void spawn() { 	// choosing random squares to be on/alive
+			for (int x=0; x<Board.length; x++) {
 				for (int y=0; y<(yHeight); y++) {
-					//density of the alive squares
-					//the number we multiply dictates the density
-					//smaller number would mean more alive squares, so 5 should be fine
-					if ((int)(Math.random()*5) == 0) {
-						beforeLife[x][y] = 1;
+					if ((int)(Math.random()*5) == 0) { //density of the alive cells, smaller number = more alive cells, 
+						beforeBoard[x][y] = 1;
+						cellPrint((int)(Math.random()*5)); //counting alive cells
 					}
+
 				}
 			}
 	}
 	
+	private void cellPrint(int b) {
+		
+		if (b == 1) { //b = true cells / "alive cells"
+			aliveCells++;
+		}
+		else{}
+		
+		System.out.println(aliveCells + " alive cells");
+	}
 	
+
 	//displaying the squares
 	private void display(Graphics g) {
 		//choosing color:
@@ -197,11 +203,11 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		copyArray();
 		
 		//we are going through every array index 
-		for (int x = 0; x < life.length; x++) {
+		for (int x = 0; x < Board.length; x++) {
 			//yPanel/size gives us the number of squares vertically
 			for (int y = 0; y < (yHeight); y++) {
 				//and if that spot is on(=1), we want to display a color filled cell
-				if (life[x][y] == 1) {
+				if (Board[x][y] == 1) {
 					//coloring the cells
 					g.fillRect(x * size, y * size, size, size);
 				}
@@ -212,9 +218,9 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	
 	// we are coping one array to another
 	private void copyArray() {
-		for (int x = 0; x < life.length; x++) {
+		for (int x = 0; x < Board.length; x++) {
 			for (int y = 0; y < (yHeight); y++) { //giving us amount of vertical squares
-				life[x][y] = beforeLife[x][y]; //updating fcurrent array from previous
+				Board[x][y] = beforeBoard[x][y]; //updating fcurrent array from previous
 
 			}
 		}
@@ -228,17 +234,17 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		int alive = 0;
 		//we are going down and right
 		//with xWidth and yHeight we are fixing the exception -> explained
-		alive += life[(x + xWidth -1) % xWidth][(y-1 + yHeight) % yHeight];  //top left
-		alive += life[(x + xWidth) % xWidth][(y-1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth -1) % xWidth][(y-1 + yHeight) % yHeight];  //top left
+		alive += Board[(x + xWidth) % xWidth][(y-1 + yHeight) % yHeight];
 		
-		alive += life[(x + xWidth +1) % xWidth][(y-1 + yHeight) % yHeight];
-		alive += life[(x + xWidth -1) % xWidth][(y + yHeight) % yHeight];
+		alive += Board[(x + xWidth +1) % xWidth][(y-1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth -1) % xWidth][(y + yHeight) % yHeight];
 		
-		alive += life[(x + xWidth +1) % xWidth][(y + yHeight) % yHeight];
-		alive += life[(x + xWidth -1) % xWidth][(y+1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth +1) % xWidth][(y + yHeight) % yHeight];
+		alive += Board[(x + xWidth -1) % xWidth][(y+1 + yHeight) % yHeight];
 		
-		alive += life[(x + xWidth) % xWidth][(y+1 + yHeight) % yHeight];
-		alive += life[(x + xWidth +1) % xWidth][(y+1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth) % xWidth][(y+1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth +1) % xWidth][(y+1 + yHeight) % yHeight];
 		//counting the number of "neighbours" around the cell
 		
 		return alive;
@@ -248,66 +254,63 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	
 	//method for clearing the random input -> set back to 0
 	private void clear() {
-		for (int x = 0; x < life.length; x++) {
+		for (int x = 0; x < Board.length; x++) {
 			for (int y = 0; y < (yHeight); y++) {
 				//when it equals 0, it is turned off
-				beforeLife[x][y] = 0;
+				beforeBoard[x][y] = 0;
 			}
 		}
 	}
 	
 	
-	
-	
-	//our class LifePanel must implement this method from ActionListener
-	// implementing the rules of the game:
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {	// implementing the rules of conways game of Board
+
 		int alive;
-		
-		for (int x = 0; x < life.length; x++) {
-			// yPanel/size gives us the number of squares vertically
-			for (int y = 0; y < (yHeight); y++) {
-				//when we call the check() method, alive increases every time there is an alive neighbor
-				alive = check(x, y);
-				// if the cell has 3 or 2 neighbors, the cell is alive
-				if (alive == 3) {
-					beforeLife[x][y] = 1;
-				} else if ((alive == 2) && (life[x][y] == 1)) {
-					beforeLife[x][y] = 1;
+		//while(begun = true) {
+		for (int x = 0; x < Board.length; x++) {
+			for (int y = 0; y < (yHeight); y++) { 	// yPanel/size gives us the number of squares vertically
+				alive = check(x, y);		//when we call the check() method, alive increases every time there is an alive neighbor
+				if (alive == 3) { 			
+					beforeBoard[x][y] = 1;
+				} else if ((alive == 2) && (Board[x][y] == 1)) {
+					beforeBoard[x][y] = 1;
 				} else {
-					beforeLife[x][y] = 0;
+					beforeBoard[x][y] = 0;
 				}
 			}
 		}
-		repaint(); // "refreshes" the page
-		 
+		repaint(); // "refreshes" the page 
+		
 		totalGens++;
 		System.out.println("generations: " + totalGens);
 		
-		if (totalGens >= generations) {
+		if (totalGens >= generations) { //pausing game when generations complete
 			gensComplete = true;
 			time.stop();
 			paused = true;
 			System.out.println("generations complete");
-			cellsPlaced = false;
+			completed();
 		}
 		else if (totalGens <= generations) {
 			gensComplete = false;
 		}
+	}
+		
+
 			
-	  }
-		
+	public void completed() { //when all the generations have run 
+		cellsDrawn = false;
+		System.out.println("play until reach end-state?");
 
-		
-	
+	}
 
-	
+
 	
 	private void saveProgress() { 	// need to fix the closing of the streams
 		try {
-			for (int x = 0; x < life.length; x++) { // for each row
+			for (int x = 0; x < Board.length; x++) { // for each row
 				for (int y = 0; y < (yHeight); y++) { // for each column
-					writer.write(life[x][y]); // append to the output
+					writer.write(Board[x][y]); // append to the output
 				}
 				writer.write("\n");       //new line
 			}
@@ -326,11 +329,11 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	    try {
 		    String line = reader.readLine();
 		    while (line != null) {	
-			    for (int x = 0; x < life.length; x++) { // for each row
+			    for (int x = 0; x < Board.length; x++) { // for each row
 				    for (int y = 0; y < (yHeight); y++) { // for each column
 				    	line = reader.readLine();
-				    	beforeLife[x][y] = reader.read(); // append to the output
-				    	System.out.println(beforeLife[x][y]);
+				    	beforeBoard[x][y] = reader.read(); // append to the output
+				    	System.out.println(beforeBoard[x][y]);
 				    }
 			    }
 		    }
@@ -348,35 +351,35 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		System.out.print("Enter game speed time in miliseconds:  "); 	System.out.println("(20 - 700 - recommended range) \n");
 
 		this.setTimeInput(input.nextInt());
-		
-		
-
 		inputGens(input);
 		
 	}
 	
 	
-	public void inputGens(Scanner input) {
+	public void inputGens(Scanner input) {	
 		System.out.println("how many generations do you want?");
 		
 		this.setGens(input.nextInt());
 		
 		clearScreen();
-		timedPrint("Press \"R\" for random, then \"B\" for begin, \"L\" to load progress \n");
+		timedPrint("Press \"R\" for random, \"B\" for begin, \"L\" to load progress \n");
+		timedPrint("you can draw/erase cells by clicking/dragging");
 		
 		clearScreen();
-		timedPrint("press \"q\" at any time to quit the game \n");
+		timedPrint("press \"Q\" at any time to quit the game \n");
 		
-		input.close();
-		
-	}
+		input.close();		
+		} 	
+
 	
 	public int getGens() {
 		return generations;
 	}
+	
 	public void setGens(int generations) {
 		this.generations = generations;
 	}
+	
 	public void chooseColour(String color) {
 		
 		System.out.println("Choose a colour for alive-cells? type y/n");
@@ -393,7 +396,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		else if (change.equals("n")) {
 			 colour = "GREEN";
 		}
-}
+	}
 	
 	
     void takePicture(Panel panel) {
@@ -412,22 +415,25 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     	}
     
     
-	// methods that will allow us to manually click on the panel
-	//methods for the mouse:
-	//detects the actions the mouse performs: dragging, holding, clicking etc.
+    
+	// following methods detects the actions the mouse performs: dragging, holding, clicking etc.
 	public void mouseDragged(MouseEvent e) {
 		//we can click on a cell and if it is on, turn it off and vice versa
 		int x = e.getX()/size;
 		int y = e.getY()/size;
 		
-		//if the cell is dead, we set it to be alive in the new array
-		if(life[x][y] == 0  &&  initial == 0) {
-			beforeLife[x][y] = 1;
+		if(Board[x][y] == 0  &&  initial == 0) {
+			beforeBoard[x][y] = 1;
+			aliveCells++;
+
 		}
-		else if (life[x][y] == 1  &&  initial == -1) {
-			beforeLife[x][y] = 0;
+		else if (Board[x][y] == 1  &&  initial == -1) {
+			beforeBoard[x][y] = 0;
+			aliveCells--;
+
 		}
-		repaint(); 		//to refresh it:
+		cellsDrawn = true;
+		repaint(); 
 
 	}
 	
@@ -435,18 +441,34 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		int x = e.getX()/size;
 		int y = e.getY()/size;
 		
-		if(life[x][y] == 0) {
+		if(Board[x][y] == 0) {
 			initial = 0;
+
 		}else{
 			initial = -1;
+
+			
 		}
 		repaint();
-		cellsPlaced = true;
+		cellsDrawn = true;
 
 	}
 	
 	public void mouseReleased(MouseEvent e) {
-		initial = -1;
+		//initial = -1;
+		int x = e.getX()/size;
+		int y = e.getY()/size;
+		
+		if(Board[x][y] == 0  &&  initial == 0) {
+			beforeBoard[x][y] = 1;
+
+		}
+		else if (Board[x][y] == 1  &&  initial == -1) {
+			beforeBoard[x][y] = 0;
+
+		}
+		cellsDrawn = true;
+		repaint();
 	}
 	
 	public void mouseEntered(MouseEvent e) {
@@ -468,13 +490,16 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		int x = e.getX()/size;
 		int y = e.getY()/size;
 		
-		if(life[x][y] == 0  &&  initial == 0) {
-			beforeLife[x][y] = 1;
+		if(Board[x][y] == 0  &&  initial == 0) {
+			beforeBoard[x][y] = 1;
+			aliveCells++;
 		}
-		else if (life[x][y] == 1  &&  initial == -1) {
-			beforeLife[x][y] = 0;
+		else if (Board[x][y] == 1  &&  initial == -1) {
+			beforeBoard[x][y] = 0;
+			aliveCells--;
 		}
-		cellsPlaced = true;
+		cellsDrawn = true;
+		System.out.println(aliveCells);
 		repaint();
 	}
 
@@ -488,27 +513,33 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		//if the given key is pressed
 		//"R" for reset/random
 		if(code == KeyEvent.VK_R) {
-			//we will call the method for making the squares:
-			spawn();
-			cellsPlaced = true;
+			spawn(); //method for "spawning"/drawing the cells:
+			cellsDrawn = true;
+			paused = true;
 			System.out.println("Press \"B\" to begin");
 		}
 		//"C" for clear
 		else if(code == KeyEvent.VK_C) {
 			clear();
+			aliveCells = 0;
+			cellsDrawn = false;
+			begun = false;
 			time.stop();
+			
 		}
 		
 		else if(code == KeyEvent.VK_B) {//"B" for begin -> start of the timer
-			if (cellsPlaced = true) {
+			if (aliveCells > 0) {
 			time.start();
 			begun = true;
-			}else {
-				System.out.println("before beginning: click to draw cells, or press r for random cells");
+
+			}else if (aliveCells <= 0){
+				System.out.println("before beginning: click to draw cells, or press \"r\" for random cells");
 			}
 		}
 		else if(code == KeyEvent.VK_A) {	//"A" for abandon -> timer will stop
 			clear();
+			aliveCells = 0;
 			time.stop();
 			System.out.println("aborted");
 			saveProgress();
@@ -531,13 +562,15 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		// "P" for pause
 		else if (code == KeyEvent.VK_P || code == KeyEvent.VK_SPACE) {
 			
-			if(paused == true) {
+			if(paused == true && aliveCells > 0 && begun == true) { //if paused already
 				time.start();
 				paused = false;
 			}
-			else {
+			else {  //if not already paused
 				time.stop();
 				paused = true;
+				System.out.println("paused, press \"B\" to begin");
+
 			}
 		}
 		//"O" for continue
