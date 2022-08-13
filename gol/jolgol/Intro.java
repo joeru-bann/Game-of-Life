@@ -39,7 +39,7 @@ public class Intro {
     
     public static void main(String[] args) {
 		
-		String[] arr = {"Street Party", "Tropical Carnival", "Lost Woods"};
+		String[] arr = {"Street Party", "Lost Woods"};
         Random rand = new Random();
 
         // randomly selects an index from the arr
