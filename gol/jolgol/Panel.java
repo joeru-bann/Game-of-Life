@@ -53,6 +53,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	boolean paused = false;
 
 	boolean begun = false; //indicated wheteher "B" key has been pressed to begin game
+	
+	int totalGens; //amount of generations run through
+	
+	int generations; //user-inputted desired amount of gens
+	
+	boolean gensComplete; 
+	
+	boolean cellsPlaced = false; //to determine whether there are cells for the game to start with
 
 	
 	int initial = -1; //indicates if the mouse is clicked
@@ -214,9 +222,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	
 	
 	//algorithm:
-	//x and y are the positions of the cell
     //checks every one of the 8 neighours of each cell
-	//every time it finds an alive cell, it increases the total count of "neighbours"
+	//every time it finds a neighbour cell, it increases the total count of alive
 	private int check (int x, int y) {
 		int alive = 0;
 		//we are going down and right
@@ -256,7 +263,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	// implementing the rules of the game:
 	public void actionPerformed(ActionEvent e) {
 		int alive;
-
+		
 		for (int x = 0; x < life.length; x++) {
 			// yPanel/size gives us the number of squares vertically
 			for (int y = 0; y < (yHeight); y++) {
@@ -272,13 +279,31 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 				}
 			}
 		}
-		// the 'repaint' "refreshes" the page
-		repaint();
-	}
+		repaint(); // "refreshes" the page
+		 
+		totalGens++;
+		System.out.println("generations: " + totalGens);
+		
+		if (totalGens >= generations) {
+			gensComplete = true;
+			time.stop();
+			paused = true;
+			System.out.println("generations complete");
+			cellsPlaced = false;
+		}
+		else if (totalGens <= generations) {
+			gensComplete = false;
+		}
+			
+	  }
+		
+
+		
+	
+
 	
 	
-	// need to fix the closing of the streams
-	private void saveProgress() {
+	private void saveProgress() { 	// need to fix the closing of the streams
 		try {
 			for (int x = 0; x < life.length; x++) { // for each row
 				for (int y = 0; y < (yHeight); y++) { // for each column
@@ -324,13 +349,33 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
 		this.setTimeInput(input.nextInt());
 		
+		
+
+		inputGens(input);
+		
+	}
+	
+	
+	public void inputGens(Scanner input) {
+		System.out.println("how many generations do you want?");
+		
+		this.setGens(input.nextInt());
+		
 		clearScreen();
 		timedPrint("Press \"R\" for random, then \"B\" for begin, \"L\" to load progress \n");
 		
 		clearScreen();
 		timedPrint("press \"q\" at any time to quit the game \n");
-
+		
 		input.close();
+		
+	}
+	
+	public int getGens() {
+		return generations;
+	}
+	public void setGens(int generations) {
+		this.generations = generations;
 	}
 	public void chooseColour(String color) {
 		
@@ -396,6 +441,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			initial = -1;
 		}
 		repaint();
+		cellsPlaced = true;
+
 	}
 	
 	public void mouseReleased(MouseEvent e) {
@@ -427,6 +474,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		else if (life[x][y] == 1  &&  initial == -1) {
 			beforeLife[x][y] = 0;
 		}
+		cellsPlaced = true;
 		repaint();
 	}
 
@@ -442,6 +490,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		if(code == KeyEvent.VK_R) {
 			//we will call the method for making the squares:
 			spawn();
+			cellsPlaced = true;
 			System.out.println("Press \"B\" to begin");
 		}
 		//"C" for clear
@@ -449,10 +498,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			clear();
 			time.stop();
 		}
-		//"B" for begin -> start of the timer
-		else if(code == KeyEvent.VK_B) {
+		
+		else if(code == KeyEvent.VK_B) {//"B" for begin -> start of the timer
+			if (cellsPlaced = true) {
 			time.start();
 			begun = true;
+			}else {
+				System.out.println("before beginning: click to draw cells, or press r for random cells");
+			}
 		}
 		else if(code == KeyEvent.VK_A) {	//"A" for abandon -> timer will stop
 			clear();
