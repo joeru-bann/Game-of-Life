@@ -3,28 +3,31 @@ package jolgol;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.*;  
-//graphics
-//event is an abstract class
-//it will allow us to animate the panel
+
+//adding mouse input listeners
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-//adding abstract classes for the mouse, so we can draw
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
 //adding input from the keyBoard
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 //saving and getting progress
 import java.io.BufferedReader;
 import java.io.FileReader;
+
 //libraries for the image
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -45,7 +48,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     
 	int[][] Board = new int[xWidth][yHeight]; 	    
 	
-	int[][] beforeBoard = new int[xWidth][yHeight]; //adding another array and set it equal to 1 later in a method
+	int[][] beforeBoard = new int[xWidth][yHeight]; //adding another array - this will be the "future" board
 
 	
 	boolean starts = true; //at the start of the program, all equals true
@@ -224,6 +227,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	//every time it finds a neighbour cell, it increases the total count of alive
 	private int check (int x, int y) {
 		int alive = 0;
+
 		//we are going down and right
 		alive += Board[(x + xWidth -1) % xWidth][(y-1 + yHeight) % yHeight];  //top left
 		alive += Board[(x + xWidth) % xWidth][(y-1 + yHeight) % yHeight];
@@ -254,13 +258,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	}
 	
 	
-	public void actionPerformed(ActionEvent e) {	// implementing the rules of conways game of Board
+	public void cellRules(ActionEvent e) {	// implementing the rules of conways game of Board
 
 		int alive;
-		//while(begun = true) {
 		for (int x = 0; x < Board.length; x++) {
 			for (int y = 0; y < (yHeight); y++) { 	// yPanel/size gives us the number of squares vertically
+				
 				alive = check(x, y);		//when we call the check() method, alive increases every time there is an alive neighbor
+				
 				if (alive == 3) { 			
 					beforeBoard[x][y] = 1;
 				} else if ((alive == 2) && (Board[x][y] == 1)) {
@@ -280,7 +285,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			time.stop();
 			paused = true;
 			System.out.println("generations complete");
-			completed();
+			
+			completed(); //send to method
 		}
 		else if (totalGens <= generations) {
 			gensComplete = false;
@@ -295,31 +301,47 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		cellsDrawn = false;
 		
 		System.out.println("play until reach end-state? (type y/n)");
-		
-		endState = input.nextLine().toLowerCase();
-		while (end = false){
-			try {
-		if (endState.equals("y")) {
-			generations = 99999999;
-			spawn();
-			end = true;
-		}
-		else if(endState.equals("n")) {
-			timedPrint("Thanks for Playing! \n");
-			timedPrint("Created by: JB \n");
-			timedPrint("Concept: Conways Game of Life");
-			sleep(10000);
-			System.exit(0);
+		while (!end) {
+			endState = input.nextLine().toLowerCase();
+
+			if (endState.equals("y")) {
+				timedPrint("\n press \"B\" to play until end \n");
+				end = true;
 			}
-		} catch (InputMismatchException e) {
-			System.out.println("Invalid input, please re-enter");
-			input.next();	
-			}	
+			else if(endState.equals("n")) {
+				end = true;
+				timedPrint("Thanks for Playing! \n");
+				timedPrint("Created by: JB \n");
+				timedPrint("Concept: Conways Game of Life \n \n");
+				sleep(7000);
+				timedPrint("leaving in 3, "); 
+				sleep(1000);
+				timedPrint("leaving in 2, ");
+				sleep(1000);
+				timedPrint("leaving in 2, ");
+
+				System.exit(0);
+				}
+			else {
+				System.out.print("");
+			}
+		}		
+	 }									
+	
+	public void endState() { //playing until cells repeat
+		
+		paused = true;
+		generations = 2147483647;
+		spawn();
+		
+		for (int x = 0; x < Board.length; x++) {
+			for (int y = 0; y < (yHeight); y++) { 	// yPanel/size gives us the number of squares vertically
+				check(x, y);
+				
+		
+			}
 		}
 	}
-
-
-	
 	private void saveProgress() { 	// need to fix the closing of the streams
 		try {
 			for (int x = 0; x < Board.length; x++) { // for each row
@@ -394,7 +416,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			clearScreen();
 			timedPrint("press \"Q\" at any time to quit the game \n");
 			validGens = true;
-			//input.close();
 
 			 	
 	}catch (InputMismatchException e) {
@@ -486,7 +507,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	}
 	
 	public void mouseEntered(MouseEvent e) {
-		if(begun == true && paused == false) {
+		if(totalGens > 0) {
 			time.start();
 		}
 		else {}
@@ -542,7 +563,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		}
 		
 		else if(code == KeyEvent.VK_B) {//"B" for begin -> start of the timer
-			if (aliveCells > 0) {
+			if (aliveCells > 0) { //if there are any cells on board
 				begun = true;
 				time.start();
 				paused = false;
@@ -632,4 +653,10 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
 	@Override
 	public void keyTyped(KeyEvent e) { }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
