@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 //adding input from the keyBoard
@@ -44,7 +45,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     
 	int[][] Board = new int[xWidth][yHeight]; 	    
 	
-	int[][] beforeBoard = new int[xWidth][yHeight]; 	//adding another array and set it equal to 1 later in a method
+	int[][] beforeBoard = new int[xWidth][yHeight]; //adding another array and set it equal to 1 later in a method
 
 	
 	boolean starts = true; //at the start of the program, all equals true
@@ -64,7 +65,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	int aliveCells = 0;
 
 
-	
 	int initial = -1; //indicates if the mouse is clicked
 	
 	Timer time;
@@ -108,15 +108,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		setBackground(Color.BLACK);
 		
 		inputTime(input);	//adding game speed):
-
+		
 		if(timeInput == 0 || timeInput <= 0) {
-			System.out.println("entered value is below/equal to 0, setting as default: 80");
 			time = new Timer(80, this);    //default
 		}else if(timeInput >= 0){
 			time = new Timer(timeInput, this);
 		}	
 	}
-
 
 	public int getTimeInput() {
 		return timeInput;
@@ -125,7 +123,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		this.timeInput = timeInput;
 	}
 	
-	public static void timedPrint(String output) { //for aesthetics, allows player to read line by line easily instead of all at once
+	//for aesthetics/ease, allows player to read line by line easily instead of all at once
+	public static void timedPrint(String output) { 
         for (int i = 0; i<output.length(); i++) {
         	char c = output.charAt(i);
             System.out.print(c);
@@ -161,7 +160,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	
 	
 	
-	
 	//creating a grid with lines (gray for ease on eyes)
 	private void grid(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
@@ -179,19 +177,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 						beforeBoard[x][y] = 1;
 						cellPrint((int)(Math.random()*5)); //counting alive cells
 					}
-
 				}
 			}
-	}
+		}
 	
 	private void cellPrint(int b) {
-		
 		if (b == 1) { //b = true cells / "alive cells"
 			aliveCells++;
-		}
-		else{}
-		
-		System.out.println(aliveCells + " alive cells");
+		}else{}	
 	}
 	
 
@@ -221,23 +214,21 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		for (int x = 0; x < Board.length; x++) {
 			for (int y = 0; y < (yHeight); y++) { //giving us amount of vertical squares
 				Board[x][y] = beforeBoard[x][y]; //updating fcurrent array from previous
-
 			}
 		}
 	}
 	
 	
 	//algorithm:
-    //checks every one of the 8 neighours of each cell
+    //checks every one of the 8 neighours of each cell (x and y are the cell positions)
 	//every time it finds a neighbour cell, it increases the total count of alive
 	private int check (int x, int y) {
 		int alive = 0;
 		//we are going down and right
-		//with xWidth and yHeight we are fixing the exception -> explained
 		alive += Board[(x + xWidth -1) % xWidth][(y-1 + yHeight) % yHeight];  //top left
 		alive += Board[(x + xWidth) % xWidth][(y-1 + yHeight) % yHeight];
 		
-		alive += Board[(x + xWidth +1) % xWidth][(y-1 + yHeight) % yHeight];
+		alive += Board[(x + xWidth +1) % xWidth][(y-1 + yHeight) % yHeight]; 
 		alive += Board[(x + xWidth -1) % xWidth][(y + yHeight) % yHeight];
 		
 		alive += Board[(x + xWidth +1) % xWidth][(y + yHeight) % yHeight];
@@ -299,9 +290,32 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
 			
 	public void completed() { //when all the generations have run 
+		String endState;
+		boolean end = false;
 		cellsDrawn = false;
-		System.out.println("play until reach end-state?");
-
+		
+		System.out.println("play until reach end-state? (type y/n)");
+		
+		endState = input.nextLine().toLowerCase();
+		while (end = false){
+			try {
+		if (endState.equals("y")) {
+			generations = 99999999;
+			spawn();
+			end = true;
+		}
+		else if(endState.equals("n")) {
+			timedPrint("Thanks for Playing! \n");
+			timedPrint("Created by: JB \n");
+			timedPrint("Concept: Conways Game of Life");
+			sleep(10000);
+			System.exit(0);
+			}
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid input, please re-enter");
+			input.next();	
+			}	
+		}
 	}
 
 
@@ -348,29 +362,47 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     }	
 	
 	public void inputTime(Scanner input) { //getting the speed of the game from user
-		System.out.print("Enter game speed time in miliseconds:  "); 	System.out.println("(20 - 700 - recommended range) \n");
-
-		this.setTimeInput(input.nextInt());
-		inputGens(input);
+		boolean validTime = false;
 		
+		System.out.print("Enter game speed time in miliseconds:  "); 	System.out.println("(20 - 700) recommended range \n");
+			while(!validTime) {
+				try {
+				this.setTimeInput(input.nextInt());
+				inputGens(input);
+				validTime = true;
+				
+				}  catch (InputMismatchException e) {
+					System.out.println("Invalid input, please re-enter");
+					input.next();			
+				}
+			}
 	}
 	
-	
 	public void inputGens(Scanner input) {	
-		System.out.println("how many generations do you want?");
+		boolean validGens = false;
+		System.out.println("how many generations do you want?"); 
 		
-		this.setGens(input.nextInt());
-		
-		clearScreen();
-		timedPrint("Press \"R\" for random, \"B\" for begin, \"L\" to load progress \n");
-		timedPrint("you can draw/erase cells by clicking/dragging");
-		
-		clearScreen();
-		timedPrint("press \"Q\" at any time to quit the game \n");
-		
-		input.close();		
-		} 	
+		while(!validGens) {
+			try {	
+			this.setGens(input.nextInt());
+			clearScreen();
+			
+			timedPrint("random cells: Press \"R\" \n");
+			timedPrint("\"B\" for begin, Spacebar to pause, \"L\" to load progress \n");
+			timedPrint("you can draw/erase cells by clicking/dragging \n");
+			
+			clearScreen();
+			timedPrint("press \"Q\" at any time to quit the game \n");
+			validGens = true;
+			//input.close();
 
+			 	
+	}catch (InputMismatchException e) {
+        System.out.println("Invalid gens, please re-type");
+        input.next();
+			}
+		}
+	}
 	
 	public int getGens() {
 		return generations;
@@ -380,29 +412,11 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		this.generations = generations;
 	}
 	
-	public void chooseColour(String color) {
-		
-		System.out.println("Choose a colour for alive-cells? type y/n");
-		String change = input.nextLine();
-		String colour;
-
-		
-		if (change.equals("y")) {
-			
-			System.out.println("type a colour for the alive ");
-			 colour = input.nextLine();
-		}
-		
-		else if (change.equals("n")) {
-			 colour = "GREEN";
-		}
-	}
 	
-	
-    void takePicture(Panel panel) {
+    void takePicture(Panel panel) { //t
     	  BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-    	  // it draws the panel
-    	  //so if we pass just the constructor, it will draw the background and the grid
+    	  //draws the panel
+    	  //if we pass just the constructor, it will draw the background and the grid
     	  // but not the components, because it's a brand new panel
     	  // so when we pass a panel, we pass the current one (using 'this')
     	  panel.paint(img.getGraphics()); // or: panel.printAll(...);
@@ -499,7 +513,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			aliveCells--;
 		}
 		cellsDrawn = true;
-		System.out.println(aliveCells);
 		repaint();
 	}
 
@@ -509,7 +522,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
-		
 		//if the given key is pressed
 		//"R" for reset/random
 		if(code == KeyEvent.VK_R) {
@@ -524,14 +536,17 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			aliveCells = 0;
 			cellsDrawn = false;
 			begun = false;
+			paused = true;
 			time.stop();
 			
 		}
 		
 		else if(code == KeyEvent.VK_B) {//"B" for begin -> start of the timer
 			if (aliveCells > 0) {
-			time.start();
-			begun = true;
+				begun = true;
+				time.start();
+				paused = false;
+
 
 			}else if (aliveCells <= 0){
 				System.out.println("before beginning: click to draw cells, or press \"r\" for random cells");
@@ -550,9 +565,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			if(filename.length() == 0) {
 				saveProgress();
 			}else {
-				System.out.println("else save");
-				//filename.delete();
-				//saveProgress();
+				filename.delete();
+				saveProgress();
 			}	
 		}
 		else if(code == KeyEvent.VK_L) { // "L" for load progress
@@ -560,18 +574,21 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			System.out.println("loaded previous save");
 		}
 		// "P" for pause
-		else if (code == KeyEvent.VK_P || code == KeyEvent.VK_SPACE) {
+		else if (code == KeyEvent.VK_SPACE) {
 			
-			if(paused == true && aliveCells > 0 && begun == true) { //if paused already
-				time.start();
-				paused = false;
-			}
-			else {  //if not already paused
+		if (begun = false){  //if game hasnt started: do nothing
 				time.stop();
 				paused = true;
 				System.out.println("paused, press \"B\" to begin");
-
-			}
+		}
+		else if(totalGens > 0 && aliveCells >0 && paused == true) { //if paused already: unpause
+					time.start();
+					paused = false;
+					System.out.println("unpause");
+				}else {		//while game is already running: pause
+					paused = true;
+					time.stop();
+				}
 		}
 		//"O" for continue
 		else if (code == KeyEvent.VK_O  && begun == true) {
