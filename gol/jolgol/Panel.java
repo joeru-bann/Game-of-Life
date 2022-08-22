@@ -144,10 +144,19 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         } catch (Exception e) {}
     }
 	
+	
+	//I got this clearScreen method from stackoverflow, and it is not my own piece of code.
+	//credit goes to Abhishek Kashyap 
+	//https://stackoverflow.com/questions/2979383/how-to-clear-the-console
 	public static void clearScreen() {   //flushing terminal (clearing)
-	    System.out.print("\u000c");  
-	    System.out.flush();  
-	}  
+	    //Clears Screen in java
+	    try {
+	        if (System.getProperty("os.name").contains("Windows"))
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        else
+	            Runtime.getRuntime().exec("clear");
+	    } catch (IOException | InterruptedException ex) {}
+	}
 
 
 	//calling the creation methods for the elements
@@ -410,11 +419,11 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			clearScreen();
 			
 			timedPrint("random cells: Press \"R\" \n");
-			timedPrint("\"B\" for begin, Spacebar to pause, \"L\" to load progress \n");
-			timedPrint("you can draw/erase cells by clicking/dragging \n");
+			timedPrint("\"B\" for begin, Spacebar to pause, \n\"L\" to load progress \n");
+			timedPrint("draw/erase cells by clicking/dragging \n");
 			
 			clearScreen();
-			timedPrint("press \"Q\" at any time to quit the game \n");
+			timedPrint("\"Q\" to quit at any time\n");
 			validGens = true;
 
 			 	
@@ -567,7 +576,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 				begun = true;
 				time.start();
 				paused = false;
-
+				
 
 			}else if (aliveCells <= 0){
 				System.out.println("before beginning: click to draw cells, or press \"r\" for random cells");
