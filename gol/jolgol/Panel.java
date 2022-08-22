@@ -267,7 +267,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	}
 	
 	
-	public void cellRules(ActionEvent e) {	// implementing the rules of conways game of Board
+	public void actionPerformed(ActionEvent e) {	// implementing the rules of conways game of Board
 
 		int alive;
 		for (int x = 0; x < Board.length; x++) {
@@ -662,10 +662,4 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
 	@Override
 	public void keyTyped(KeyEvent e) { }
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 }
