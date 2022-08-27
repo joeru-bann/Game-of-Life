@@ -1,20 +1,31 @@
-package jolgol;
+package gol.jolgol;
 
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 public class Intro {
-	
+    
     String intro;
     String c;
     boolean introChosen = false;
     String plainAnswer; //original user input
     String answer; //processed user input (excludes numbers)
-	boolean chosen = false; //yes/no to music
+    boolean chosen = false; //yes/no to music
     Scanner keyin = new Scanner(System.in); // reading inout from the user
-
+    
+    public static void clearScreen() {   //flushing terminal (clearing)
+        //Clears Screen in java
+        try {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {}
+    }
+    
     public static void sleep(int time) { // function to help reading process be smoother experience by pausing
         try {
             Thread.sleep(time);
@@ -23,7 +34,7 @@ public class Intro {
     
     public static void timedPrint(String output) { //for aesthetics, allows player to read line by line easily instead of all at once
         for (int i = 0; i<output.length(); i++) {
-        	char c = output.charAt(i);
+            char c = output.charAt(i);
             System.out.print(c);
             try {
                 TimeUnit.MILLISECONDS.sleep(13);
@@ -32,55 +43,56 @@ public class Intro {
         }
     }
     public static void main(String[] args) {
-			new Intro();
-	}
+            new Intro();
+    }
     
-    public void musicChoice(String music) { //giving option to turn music on/off	
-    	while (!chosen) {
-    	try { 
-		   if (music.equals("y") || (music.equals("yes"))){
-				String[] arr = {"Street Party", "Lost Woods"}; //available song names
-			    Random rand = new Random();
-			    int select = rand.nextInt(arr.length); //randmly choosing a song
-			    String noWav = arr[select] + ".wav"; //adding .wav to recognize file in directory
-			    String filepath = noWav;
-			
-			    Sound musicObject = new Sound();
-				musicObject.playMusic(filepath);
-					
-				System.out.println("now playing: " + arr[select]);
-				sleep(200);
-				chosen = true;
-				
-    	} else if (music.equals("n") || (music.equals("no"))) {
- 		   	chosen = true;
-    		} else {
-   	    	 timedPrint("choose a valid option \n");
-   	    	 chooseMusic();
-   	    	} 
-	   
-    	} catch (InputMismatchException e) {
+    public void musicChoice(String music) { //giving option to turn music on/off    
+        while (!chosen) {
+        try { 
+           if (music.equals("y") || (music.equals("yes"))){
+                String[] arr = {"Street Party", "Lost Woods"}; //available song names
+                Random rand = new Random();
+                int select = rand.nextInt(arr.length); //randmly choosing a song
+                String noWav = arr[select] + ".wav"; //adding .wav to recognize file in directory
+                String filepath = noWav;
+            
+                Sound musicObject = new Sound();
+                musicObject.playMusic(filepath);
+                    
+                System.out.println("now playing: " + arr[select]);
+                sleep(200);
+                chosen = true;
+                
+        } else if (music.equals("n") || (music.equals("no"))) {
+                chosen = true;
+            } else {
+                timedPrint("choose a valid option \n");
+                chooseMusic();
+               } 
+       
+        } catch (InputMismatchException e) {
             timedPrint("error: please enter a valid option");
-	    	chosen = false;
+            chosen = false;
       }
     }
   }
 
     
-	private void chooseMusic() {
-			timedPrint("do you want music? enter y/n");
-	     	plainAnswer = keyin.nextLine().toLowerCase();
-			answer = plainAnswer.replaceAll("[0123456789]", ""); //removing any numbers from the string
-	     	musicChoice(answer);
-		}
+    private void chooseMusic() {
+            clearScreen();
+            timedPrint("do you want music? enter y/n");
+             plainAnswer = keyin.nextLine().toLowerCase();
+            answer = plainAnswer.replaceAll("[0123456789]", ""); //removing any numbers from the string
+             musicChoice(answer);
+        }
 
-	public Intro() {
-	
-	chooseMusic();
+    public Intro() {
+    
+    chooseMusic();
 
      while (chosen = true && (!introChosen)){
-    	 System.out.println("read introduction? or skip:  type r/read, or s/skip");
-    	 
+         System.out.println("read introduction? or skip:  type r/read, or s/skip");
+         
          intro = keyin.nextLine().toLowerCase(); 
 
          if(intro.equals("read") || (intro.equals("r"))) {
@@ -92,9 +104,9 @@ public class Intro {
           
              System.out.println("\npress \"c\" to continue");
              c = keyin.nextLine().toLowerCase();
-             	if(c.equals("c")) {
-             		new Frame();
-             	}
+                 if(c.equals("c")) {
+                     new Frame();
+                 }
          } 
          
          else if (intro.equals("skip") || (intro.equals("s"))) {
@@ -104,8 +116,8 @@ public class Intro {
          }
          else {
              System.out.print("please choose an intro option..");
-         	}
-     }  	 
+             }
+     }       
   }  
 }
  
