@@ -28,10 +28,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-//libraries for the image
-import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
 
 public class Panel extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
                        
@@ -310,11 +307,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		cellsDrawn = false;
 		
 		System.out.println("play until reach end-state? (type y/n)");
+
 		while (!end) {
-			endState = input.nextLine().toLowerCase();
+			endState = input.nextLine();
 
 			if (endState.equals("y")) {
-				timedPrint("\n press \"B\" to play until end \n");
+				timedPrint("\npress \"B\" to play until end \n");
+				totalGens = 0;
+				generations = 2147483647;
 				end = true;
 			}
 			else if(endState.equals("n")) {
@@ -327,14 +327,16 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 				sleep(1000);
 				timedPrint("leaving in 2, ");
 				sleep(1000);
-				timedPrint("leaving in 2, ");
+				timedPrint("leaving in 1, ");
 
 				System.exit(0);
+				input.close();
 				}
 			else {
 				System.out.print("");
 			}
-		}		
+			
+		} 		
 	 }									
 	
 	public void endState() { //playing until cells repeat
@@ -391,11 +393,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	    
 	    repaint();
     }	
+    
 	
 	public void inputTime(Scanner input) { //getting the speed of the game from user
 		boolean validTime = false;
 		
-		System.out.print("Enter game speed time in miliseconds:  "); 	System.out.println("(20 - 700) recommended range \n");
+		System.out.print("Enter game speed time in miliseconds:  "); 
+		System.out.println("(20 - 700) recommended range \n");
 			while(!validTime) {
 				try {
 				this.setTimeInput(input.nextInt());
@@ -423,7 +427,10 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 			timedPrint("draw/erase cells by clicking/dragging \n");
 			
 			clearScreen();
-			timedPrint("\"Q\" to quit at any time\n");
+			timedPrint("press \"Q\" to quit at any time\n");
+			
+			timedPrint("click window to focus, and drag to positon it as you wish \n");
+
 			validGens = true;
 
 			 	
@@ -442,23 +449,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		this.generations = generations;
 	}
 	
-	
-    void takePicture(Panel panel) { //t
-    	  BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-    	  //draws the panel
-    	  //if we pass just the constructor, it will draw the background and the grid
-    	  // but not the components, because it's a brand new panel
-    	  // so when we pass a panel, we pass the current one (using 'this')
-    	  panel.paint(img.getGraphics()); // or: panel.printAll(...);
-    	  try {
-    	    ImageIO.write(img, "png", new File("panel.png"));
-    	  }
-    	  catch (IOException e) {
-    	    e.printStackTrace();
-    	  }
-    	}
-    
-    
     
 	// following methods detects the actions the mouse performs: dragging, holding, clicking etc.
 	public void mouseDragged(MouseEvent e) {
@@ -516,14 +506,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 	}
 	
 	public void mouseEntered(MouseEvent e) {
-		if(totalGens > 0) {
+		if(totalGens > 0 && paused == false) { //game unpauses if mouse enters window again (after exiting)
 			time.start();
 		}
-		else {}
+		else {} //do nothing
 	}
 	
 	public void mouseExited(MouseEvent e) { 
-		time.stop();
+		time.stop(); //pauses if mouse exits windo
 	}
 	
 	//movement of the mouse
@@ -614,7 +604,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		else if(totalGens > 0 && aliveCells >0 && paused == true) { //if paused already: unpause
 					time.start();
 					paused = false;
-					System.out.println("unpause");
 				}else {		//while game is already running: pause
 					paused = true;
 					time.stop();
@@ -623,11 +612,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 		//"O" for continue
 		else if (code == KeyEvent.VK_O  && begun == true) {
 			time.start();
-
-		}
-		// "I" for Picture
-		else if (code == KeyEvent.VK_I) {
-			takePicture(this);
 
 		}
 		// "T" for save Time
