@@ -1,25 +1,20 @@
 package jolgol;
 
-
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Intro {
 	
-	//private static final long serialVersionUID = 1L;
-
-	
-    String modeChoice;
     String intro;
     String c;
     boolean introChosen = false;
-    boolean gameModePicked = false;
-    boolean fileBoard = false;
-    int choice = 0;
+    String plainAnswer; //original user input
+    String answer; //processed user input (excludes numbers)
+	boolean chosen = false; //yes/no to music
+    Scanner keyin = new Scanner(System.in); // reading inout from the user
 
-    
-   
     public static void sleep(int time) { // function to help reading process be smoother experience by pausing
         try {
             Thread.sleep(time);
@@ -31,47 +26,71 @@ public class Intro {
         	char c = output.charAt(i);
             System.out.print(c);
             try {
-                TimeUnit.MILLISECONDS.sleep(10);
+                TimeUnit.MILLISECONDS.sleep(13);
               }
               catch (Exception e) {}
         }
     }
-    
     public static void main(String[] args) {
-		
-		String[] arr = {"Street Party", "Lost Woods"};
-        Random rand = new Random();
-
-        // randomly selects an index from the arr
-        int select = rand.nextInt(arr.length); 
-    	String noWav = arr[select] + ".wav";
-    	
-    	String filepath = noWav;
-    		
-    	System.out.println("now playing: " + arr[select]);
-			Sound musicObject = new Sound();
-			musicObject.playMusic(filepath);
-		
 			new Intro();
-
 	}
     
-	public Intro() {
-		
-		   Scanner keyin = new Scanner(System.in); // reading inout from the user
-	 System.out.println("read introduction? or skip:  type r/read, or s/skip");
+    public void musicChoice(String music) { //giving option to turn music on/off	
+    	while (!chosen) {
+    	try { 
+		   if (music.equals("y") || (music.equals("yes"))){
+				String[] arr = {"Street Party", "Lost Woods"}; //available song names
+			    Random rand = new Random();
+			    int select = rand.nextInt(arr.length); //randmly choosing a song
+			    String noWav = arr[select] + ".wav"; //adding .wav to recognize file in directory
+			    String filepath = noWav;
+			
+			    Sound musicObject = new Sound();
+				musicObject.playMusic(filepath);
+					
+				System.out.println("now playing: " + arr[select]);
+				sleep(200);
+				chosen = true;
+				
+    	} else if (music.equals("n") || (music.equals("no"))) {
+ 		   	chosen = true;
+    		} else {
+   	    	 timedPrint("choose a valid option \n");
+   	    	 chooseMusic();
+   	    	} 
+	   
+    	} catch (InputMismatchException e) {
+            timedPrint("error: please enter a valid option");
+	    	chosen = false;
+      }
+    }
+  }
 
-     while (!introChosen){
+    
+	private void chooseMusic() {
+			timedPrint("do you want music? enter y/n");
+	     	plainAnswer = keyin.nextLine().toLowerCase();
+			answer = plainAnswer.replaceAll("[0123456789]", ""); //removing any numbers from the string
+	     	musicChoice(answer);
+		}
+
+	public Intro() {
+	
+	chooseMusic();
+
+     while (chosen = true && (!introChosen)){
+    	 System.out.println("read introduction? or skip:  type r/read, or s/skip");
+    	 
          intro = keyin.nextLine().toLowerCase(); 
 
          if(intro.equals("read") || (intro.equals("r"))) {
              introChosen = true;
-             timedPrint("Heeeelloo!.. today, I introduce to you Joel's Game of Life! \n" 
+             timedPrint("Heeeelloo!.. Today, I introduce to you Joel's Game of Life! \n" 
                  + "How it goes: \n"
-                 +"You can choose randomized, which spawns a random map of cells; either dead or alive, \n"
-                 +"You can also load-up your own map of 1's and 0's. This will turn into a board of cells \n" );
+                 +"Pressing \"R\": will spawn a random map of cells; either dead or alive, \n"
+                 +"Change the speed and how many generations (how many times the cells will change)");
           
-             System.out.println("press \"c\" to continue");
+             System.out.println("\npress \"c\" to continue");
              c = keyin.nextLine().toLowerCase();
              	if(c.equals("c")) {
              		new Frame();
@@ -86,7 +105,7 @@ public class Intro {
          else {
              System.out.print("please choose an intro option..");
          	}
-      }   
-	}
- }
-
+     }  	 
+  }  
+}
+ 
