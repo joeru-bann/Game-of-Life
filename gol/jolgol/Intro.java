@@ -14,6 +14,7 @@ public class Intro {
     String plainAnswer; //original user input
     String answer; //processed user input (excludes numbers)
     boolean chosen = false; //yes/no to music
+    String continueC;
     Scanner keyin = new Scanner(System.in); // reading inout from the user
     
     public static void clearScreen() {   //flushing terminal (clearing)
@@ -102,11 +103,23 @@ public class Intro {
                  +"Pressing \"R\": will spawn a random map of cells; either dead or alive, \n"
                  +"Change the speed and how many generations (how many times the cells will change)");
           
-             System.out.println("\npress \"c\" to continue");
-             c = keyin.nextLine().toLowerCase();
+                System.out.println("\npress \"c\" to continue");
+                continueC = keyin.nextLine().toLowerCase();
+                c = continueC.replaceAll("[0123456789]", "");
+             try{
                  if(c.equals("c")) {
                      new Frame();
                  }
+                 else{
+                    System.out.println("c is the only way forward. Please press \"c\" on keyboard");
+                    keyin.next();  
+                    }
+                
+                }   catch (InputMismatchException e) {
+                System.out.println("invalid response");
+                keyin.next();            
+            }
+        
          } 
          
          else if (intro.equals("skip") || (intro.equals("s"))) {
