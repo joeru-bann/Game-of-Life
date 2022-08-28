@@ -490,7 +490,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
     public void mouseExited(MouseEvent e) { 
         time.stop(); //pauses if mouse exits windo
-        if (totalGens > 0){
+        if (totalGens > 0 && paused == false){
         System.out.println("paused");
         }
     }
