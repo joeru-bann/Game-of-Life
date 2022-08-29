@@ -1,4 +1,4 @@
-package gol.jolgol;
+package jolgol;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -289,7 +289,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         cellsDrawn = false;
 
         System.out.println("play until reach end-state? (type y/n)");
-
         while (!end) {
             endState = input.nextLine();
 
@@ -300,14 +299,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
                 end = true;
             }
             else if(endState.equals("n")) {
-                end = true;
                 timedPrint("Thanks for Playing! \n");
                 timedPrint("Created by: JB \n");
                 timedPrint("Concept: Conways Game of Life \n \n");
                 sleep(7000);
-                timedPrint("leaving in 3, "); 
+                timedPrint("leaving in 3, \n"); 
                 sleep(1000);
-                timedPrint("leaving in 2, ");
+                timedPrint("leaving in 2, \n");
                 sleep(1000);
                 timedPrint("leaving in 1, ");
 
