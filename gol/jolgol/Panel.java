@@ -125,7 +125,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
             char c = output.charAt(i);
             System.out.print(c);
             try {
-                TimeUnit.MILLISECONDS.sleep(10);
+                TimeUnit.MILLISECONDS.sleep(13);
             }
             catch (Exception e) {}
         }
@@ -173,31 +173,29 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
             for (int y=0; y<(yHeight); y++) {
                 if ((int)(Math.random()*5) == 0) { //density of the alive cells, smaller number = more alive cells, 
                     beforeBoard[x][y] = 1;
-                    cellPrint((int)(Math.random()*5)); //counting alive cells
+                    cellAmount((int)(Math.random()*5)); //counting alive cells
                 }
             }
         }
     }
 
-    private void cellPrint(int b) { //debugging for amount of alive cells
-        if (b == 1) { //b = true cells / "alive cells"
-            aliveCells++;
-        }else{}    
-    }
+    private void cellAmount(int b) {
+		if (b == 1) { //b = true cells / "alive cells"
+			aliveCells++;
+		} else{}
+	}
 
     private void display(Graphics g) {
         g.setColor(Color.GREEN);  //choosing color:
 
         copyArray();
 
-        //we are going through every array index 
         for (int x = 0; x < Board.length; x++) {
-            //yPanel/size gives us the number of squares vertically
-            for (int y = 0; y < (yHeight); y++) {
-                //and if that spot is on(=1), we want to display a color filled cell
-                if (Board[x][y] == 1) {
-                    //coloring the cells
-                    g.fillRect(x * size, y * size, size, size);
+            for (int y = 0; y < (yHeight); y++) { //yPanel/size gives us the number of squares vertically
+
+                if (Board[x][y] == 1) {  //and if that spot is = 1, we want to display a color filled cell
+
+                    g.fillRect(x * size, y * size, size, size); //coloring the cells
                 }
             }
         }
@@ -206,8 +204,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     // we are coping one array to another
     private void copyArray() {
         for (int x = 0; x < Board.length; x++) {
-            for (int y = 0; y < (yHeight); y++) { //giving us amount of vertical squares
-                Board[x][y] = beforeBoard[x][y]; //updating fcurrent array from previous
+            for (int y = 0; y < (yHeight); y++) { 
+                Board[x][y] = beforeBoard[x][y]; //updating current array from previous
             }
         }
     }
@@ -289,13 +287,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         cellsDrawn = false;
 
         System.out.println("play until reach end-state? (type y/n)");
+       // input.next(); 
         while (!end) {
             endState = input.nextLine(); 
 
             if (endState.equals("y")) {
                 timedPrint("\npress \"B\" to play until end \n");
-                totalGens = 0;
-                generations = 2147483647;
+                endState();
                 end = true;
             }
             else if(endState.equals("n")) {
@@ -314,14 +312,20 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
                 input.close();
             }
             else {
-                System.out.print("please enter a valid ending option");
+                System.out.print("");
             }
 
         }         
     }                                    
 
     public void endState() { //playing until cells repeat
-
+    	
+    	while (totalGens >= generations) {
+    		if (aliveCells == 0) { //if there are no more alive cells on board
+    		System.out.println("No more cells left! Game is over, thanks for playing.");
+    		}
+    	}
+        totalGens = 0;
         paused = true;
         generations = 2147483647;
         spawn();
@@ -334,13 +338,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    private void saveProgress() {     // need to fix the closing of the streams
+    private void saveProgress() {     
         try {
-            for (int x = 0; x < Board.length; x++) { // for each row
-                for (int y = 0; y < (yHeight); y++) { // for each column
-                    writer.write(Board[x][y]); // append to the output
+            for (int x = 0; x < Board.length; x++) { 
+                for (int y = 0; y < (yHeight); y++) { 
+                    writer.write(Board[x][y]); //add to output
                 }
-                writer.write("\n");       //new line
+                writer.write("\n"); //new line
             }
             writer.close();
             file.close();
@@ -351,7 +355,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    // need to fix the closing of the streams
     private void getProgress() {
         try {
             String line = reader.readLine();
@@ -359,7 +362,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
                 for (int x = 0; x < Board.length; x++) { // for each row
                     for (int y = 0; y < (yHeight); y++) { // for each column
                         line = reader.readLine();
-                        beforeBoard[x][y] = reader.read(); // append to the output
+                        beforeBoard[x][y] = reader.read(); // add to the output
                         System.out.println(beforeBoard[x][y]);
                     }
                 }
@@ -404,6 +407,8 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
                 timedPrint("random cells: Press \"R\" \n");
                 timedPrint("\"B\" to begin, Spacebar to pause, \n\"L\" to load progress \n");
                 timedPrint("draw/erase cells by clicking/dragging \n");
+                timedPrint("Press \"1\" on keyboard to advanced a single generation \n");
+
 
                 timedPrint("press \"Q\" to quit at any time\n");
 
@@ -452,7 +457,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         int y = e.getY()/size;
 
         if(Board[x][y] == 0) {
-            initial = 1;
+            initial = 0;
 
         }else{
             initial = -1;
@@ -464,6 +469,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     }
 
     public void mouseReleased(MouseEvent e) {
+		System.out.println(aliveCells + " alive cells"); //how many green squares there are
         //initial = -1;
         int x = e.getX()/size;
         int y = e.getY()/size;
@@ -494,8 +500,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    //movement of the mouse
-    public void  mouseMoved(MouseEvent e) { }
+    public void mouseMoved(MouseEvent e) { }
 
     public void mouseClicked(MouseEvent e) {  //same as drag, but clicking individual cells for accuracy
         int x = e.getX()/size;
@@ -528,12 +533,42 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         //"C" for clear
         else if(code == KeyEvent.VK_C) {
             clear();
+            System.out.println("reset generations to " + generations);
             aliveCells = 0;
+            totalGens = 0; //resetting generations already passed
             cellsDrawn = false;
             begun = false;
             paused = true;
             time.stop();
 
+        }
+        else if (code == KeyEvent.VK_1) { //advancing a singular generation
+        	time.stop();
+
+        	if (code == KeyEvent.VK_1) {
+        		int alive;
+                for (int x = 0; x < Board.length; x++) {
+                    for (int y = 0; y < (yHeight); y++) {     // yPanel/size gives us the number of squares vertically
+
+                        alive = check(x, y);        //when we call the check() method, alive increases every time there is an alive neighbor
+
+                        if (alive == 3) {             
+                            beforeBoard[x][y] = 1;
+                        } else if ((alive == 2) && (Board[x][y] == 1)) {
+                            beforeBoard[x][y] = 1;
+                        } else {
+                            beforeBoard[x][y] = 0;
+                        }
+                    }
+                }
+                repaint(); // "refreshes" the page 
+
+                totalGens++;
+                System.out.println("generations: " + totalGens);
+        	} 
+        	else {
+        		System.out.println("nah");
+        	}
         }
 
         else if(code == KeyEvent.VK_B) {//"B" for begin -> start of the timer
@@ -555,7 +590,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
         else if(code == KeyEvent.VK_S) {     //"S" for save progress
 
-            System.out.println(filename.length());
+            System.out.println("Saved progress" + filename.length());
             if(filename.length() == 0) {
                 saveProgress();
             }else {
