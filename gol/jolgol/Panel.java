@@ -1,5 +1,10 @@
 package jolgol;
-
+/**
+* The main fundamentals and interactive features of the game.
+*
+* @author Joel Bannister
+* @version 29/02/22
+*/
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.*;  
@@ -95,7 +100,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         addKeyListener(this);
         setFocusable(true);
 
-        setBackground(Color.BLACK);
+        setBackground(Color.BLACK); //contrasting colour 
 
         inputTime(input);    //adding game speed):
 
@@ -126,7 +131,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
+    public static void sleep(int time) { // function to have smoother experience by pausing for a certain amount of time
         try {
             Thread.sleep(time);
         } catch (Exception e) {}
@@ -148,12 +153,9 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     //calling the creation methods for the elements
     public void paintComponent (Graphics g) {
         //we are calling the super to the Graphics class:
-        //it refreshes and shows the current position, thus it doesn't lag
         super.paintComponent(g);
-        //calling the method for creating the grid
-        grid(g);
-        //calling the methods for the squares:
-        display(g);
+        grid(g); 
+        display(g);  //calling the methods for the squares:
     }
 
     
@@ -166,7 +168,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    private void spawn() {     // choosing random squares to be on/alive
+    private void spawn() {  //choosing random squares to be on/alive
         for (int x=0; x<Board.length; x++) {
             for (int y=0; y<(yHeight); y++) {
                 if ((int)(Math.random()*5) == 0) { //density of the alive cells, smaller number = more alive cells, 
@@ -177,16 +179,14 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    private void cellPrint(int b) {
+    private void cellPrint(int b) { //debugging for amount of alive cells
         if (b == 1) { //b = true cells / "alive cells"
             aliveCells++;
         }else{}    
     }
 
-    //displaying the squares
     private void display(Graphics g) {
-        //choosing color:
-        g.setColor(Color.GREEN);
+        g.setColor(Color.GREEN);  //choosing color:
 
         copyArray();
 
@@ -266,7 +266,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
         totalGens++;
         System.out.println("generations: " + totalGens);
-        sleep(50);
+       // sleep(50);
         clearScreen();
 
         if (totalGens >= generations) { //pausing game when generations complete
@@ -290,7 +290,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
 
         System.out.println("play until reach end-state? (type y/n)");
         while (!end) {
-            endState = input.nextLine();
+            endState = input.nextLine(); 
 
             if (endState.equals("y")) {
                 timedPrint("\npress \"B\" to play until end \n");
@@ -308,12 +308,13 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
                 timedPrint("leaving in 2, \n");
                 sleep(1000);
                 timedPrint("leaving in 1, ");
-
+                sleep(1000);
+                
                 System.exit(0);
                 input.close();
             }
             else {
-                System.out.print("");
+                System.out.print("please enter a valid ending option");
             }
 
         }         
@@ -391,7 +392,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         }
     }
 
-    public void inputGens(Scanner input) {    
+    public void inputGens(Scanner input) {   //asking player for desired amount of generations
         boolean validGens = false;
         System.out.println("how many generations do you want?"); 
 
@@ -451,7 +452,7 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         int y = e.getY()/size;
 
         if(Board[x][y] == 0) {
-            initial = 0;
+            initial = 1;
 
         }else{
             initial = -1;
@@ -468,11 +469,11 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
         int y = e.getY()/size;
 
         if(Board[x][y] == 0  &&  initial == 0) {
-            beforeBoard[x][y] = 1;
+            beforeBoard[x][y] = 1; //turning off cell to on
 
         }
         else if (Board[x][y] == 1  &&  initial == -1) {
-            beforeBoard[x][y] = 0;
+            beforeBoard[x][y] = 0; //turning on cell to off
 
         }
         cellsDrawn = true;
@@ -496,7 +497,6 @@ public class Panel extends JPanel implements ActionListener, MouseListener, Mous
     //movement of the mouse
     public void  mouseMoved(MouseEvent e) { }
 
-    //MouseListener methods:
     public void mouseClicked(MouseEvent e) {  //same as drag, but clicking individual cells for accuracy
         int x = e.getX()/size;
         int y = e.getY()/size;
