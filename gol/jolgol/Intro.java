@@ -1,3 +1,9 @@
+/**
+* Introducing player to rules, and choosign music.
+*
+* @author Joel Bannister
+* @version 29/02/22
+*/
 package jolgol;
 
 import java.util.InputMismatchException;
@@ -14,11 +20,11 @@ public class Intro {
     String plainAnswer; //original user input
     String answer; //processed user input (excludes numbers)
     boolean chosen = false; //yes/no to music
+    boolean continued = false; //for continuing after reading introduction
     String continueC;
     Scanner keyin = new Scanner(System.in); // reading inout from the user
     
     public static void clearScreen() {   //flushing terminal (clearing)
-        //Clears Screen in java
         try {
             if (System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -27,7 +33,7 @@ public class Intro {
         } catch (IOException | InterruptedException ex) {}
     }
     
-    public static void sleep(int time) { // function to help reading process be smoother experience by pausing
+    public static void sleep(int time) { // "pausing" for a certain amount of time - to avoid bug after choosing
         try {
             Thread.sleep(time);
         } catch (Exception e) {}
@@ -38,7 +44,7 @@ public class Intro {
             char c = output.charAt(i);
             System.out.print(c);
             try {
-                TimeUnit.MILLISECONDS.sleep(13);
+                TimeUnit.MILLISECONDS.sleep(20);
               }
               catch (Exception e) {}
         }
@@ -60,7 +66,7 @@ public class Intro {
                 Sound musicObject = new Sound();
                 musicObject.playMusic(filepath);
                     
-                System.out.println("now playing: " + arr[select]);
+                timedPrint("now playing: " + arr[select] + "\n");
                 sleep(200);
                 chosen = true;
                 
@@ -72,27 +78,29 @@ public class Intro {
                } 
        
         } catch (InputMismatchException e) {
-            timedPrint("error: please enter a valid option");
+            timedPrint("error: please enter a valid option \n");
             chosen = false;
       }
     }
   }
-
     
     private void chooseMusic() {
             clearScreen();
             timedPrint("do you want music? enter y/n");
              plainAnswer = keyin.nextLine().toLowerCase();
-            answer = plainAnswer.replaceAll("[0123456789]", ""); //removing any numbers from the string
+            answer = plainAnswer.replaceAll("[0123456789]", ""); //removing any numbers from the string - avoiding errors
              musicChoice(answer);
         }
 
     public Intro() {
     
     chooseMusic();
+    sleep(350);
+    System.out.println("\nread introduction? or skip:  type r/read, or s/skip ");
 
-     while (chosen = true && (!introChosen)){
-         System.out.println("read introduction? or skip:  type r/read, or s/skip");
+     while (chosen = true && (!introChosen)) {
+    	 
+    	 try {
          
          intro = keyin.nextLine().toLowerCase(); 
 
@@ -101,36 +109,40 @@ public class Intro {
              timedPrint("Heeeelloo!.. Today, I introduce to you Joel's Game of Life! \n" 
                  + "How it goes: \n"
                  +"Pressing \"R\": will spawn a random map of cells; either dead or alive, \n"
-                 +"Change the speed and how many generations (how many times the cells will change)");
-          
-                System.out.println("\npress \"c\" to continue");
-                continueC = keyin.nextLine().toLowerCase();
-                c = continueC.replaceAll("[0123456789]", "");
-             try{
-                 if(c.equals("c")) {
-                     new Frame();
-                 }
-                 else{
-                    System.out.println("c is the only way forward. Please press \"c\" on keyboard");
-                    keyin.next();  
-                    }
-                
-                }   catch (InputMismatchException e) {
-                System.out.println("invalid response");
-                keyin.next();            
-            }
-        
-         } 
-         
-         else if (intro.equals("skip") || (intro.equals("s"))) {
-             introChosen = true;
-             
+                 +"You can change the speed and how many generations (how many times the cells will change) \n"
+                 +"You will be able to interact with the game, by pressing keys on keyboard during gameplay \n"
+                 +"\n");
+             System.out.println("Please enter \"c\" to continue");
+                 
+        	 continued = true;
+         }    
+         	
+    	 else if (intro.equals("skip") || (intro.equals("s"))) {
              new Frame();
+             introChosen = true;
          }
          else {
              System.out.print("please choose an intro option..");
              }
-     }       
-  }  
+         
+           } catch (InputMismatchException e) {
+                System.out.println("invalid response");
+                keyin.next(); 
+           }
+    	 
+    	 while (continued) {
+     continueC = keyin.nextLine().toLowerCase();
+     c = continueC.replaceAll("[0123456789]", "");  //removing any numbers from the string to avoid errors
+     
+        if(c.equals("c")) {
+              new Frame();
+              introChosen = true;
+          }
+          else{
+             System.out.println("invalid input - please press \"c\" ");
+             }
+    	 }
+      }
+   }
 }
  
