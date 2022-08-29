@@ -1,4 +1,4 @@
-package gol.jolgol;
+package jolgol;
 
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -51,7 +51,7 @@ public class Intro {
         while (!chosen) {
         try { 
            if (music.equals("y") || (music.equals("yes"))){
-                String[] arr = {"Street Party", "Lost Woods"}; //available song names
+                String[] arr = {"Street Party", "Lost Woods", "Greenpath"}; //available song names
                 Random rand = new Random();
                 int select = rand.nextInt(arr.length); //randmly choosing a song
                 String noWav = arr[select] + ".wav"; //adding .wav to recognize file in directory
