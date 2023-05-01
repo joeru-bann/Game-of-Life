@@ -5,6 +5,6 @@ VERSION or DATE: 10/5/22
 HOW TO START THIS PROJECT:
 AUTHORS: joerufx
 USER INSTRUCTIONS: 
-1. clone https://github.com/joeru-bann/Game-of-Life
+1. clone https://github.com/joeru-bann/Game-of-Life.git
 2. cd Game-of-life
 3. run Main.java 
