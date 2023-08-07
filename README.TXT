@@ -6,4 +6,4 @@ HOW TO START THIS PROJECT:
 AUTHORS: Joel
 USER INSTRUCTIONS: 
 1. clone Game-of-Life directory
-2. Run Main.java 
+2. Run Frame.java (cmd: java Frame.java) - reVamp
