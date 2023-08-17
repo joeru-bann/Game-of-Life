@@ -1,9 +1,9 @@
 ---------------------------------------------------------------------
-PROJECT TITLE: Conway's Game of Life
-PURPOSE OF PROJECT: Full 100% Java recreation of Conway's "Game of Life"
+Java implementation of Conway's "Game of Life"
 VERSION or DATE: 10/5/22
 HOW TO START THIS PROJECT:
-AUTHORS: Joel
+AUTHORS: joerufx
 USER INSTRUCTIONS: 
-1. clone Game-of-Life directory
-2. Run Frame.java (cmd: java Frame.java) - reVamp
+1. clone https://github.com/joeru-bann/Game-of-Life.git
+2. cd Game-of-life
+3.compile and run Intro.java using javac
